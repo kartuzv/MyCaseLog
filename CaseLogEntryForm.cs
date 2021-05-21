@@ -120,33 +120,47 @@ namespace MyCaseLog
                 e.PTAge = txtAGE.Text;
                 e.PTMRN = txtMRN.Text;
             }
-            else {
+            else
+            {
                 e.PTSex = "";
                 e.PTAge = "";
                 e.PTMRN = "";
             }
 
-			e.StudyAcc = txtACC.Text;
-			e.StudyDesc = rtxtDescr.Text;
+            e.StudyAcc = txtACC.Text;
+            e.StudyDesc = rtxtDescr.Text;
             e.BillAmount = txtBill.Text;
 
-			e.IsPublished = chkIsPub.Checked;
-			e.IsLocalConference = chkIsConf.Checked;
+            e.IsPublished = chkIsPub.Checked;
+            e.IsLocalConference = chkIsConf.Checked;
             e.IsSocietyConference = chkSocConf.Checked;
 
             SaveEntryToExcel(e);
             Debug.WriteLine(e.ToString());
 
-            if (_gotSnapshot && chkSnap.Checked)
+            //if (_gotSnapshot && chkSnap.Checked)
+            //{
+
+
+           // string savingPath = e.LogStudyPath + "\\Screenshot_" + DateTime.Now.ToString("yyyyMMddHHmmss") + ".jpeg";
+            //pictureBox1.Image.Save(savingPath, ImageFormat.Jpeg);
+            //don't create hyperlink to folder unless have screenshot
+            if (snaps.Count > 0)
             {
                 if (!Directory.Exists(e.LogStudyPath))
                     Directory.CreateDirectory(e.LogStudyPath);
 
-                string savingPath = e.LogStudyPath + "\\Screenshot_" + DateTime.Now.ToString("yyyyMMddHHmmss") + ".jpeg";
-                pictureBox1.Image.Save(savingPath, ImageFormat.Jpeg);
+                              int i = 1;
+                foreach (Bitmap img in snaps)
+                {
+                    string savingPath = e.LogStudyPath + "\\Screenshot_" + DateTime.Now.ToString("yyyyMMddhhmmss") + $"_{i}.jpeg";
+                    img.Save(savingPath, ImageFormat.Jpeg);
+                    i++;
+                }
             }
+            //}
             this.Hide();
-		}
+        }
 
 
         #region Excel export
@@ -216,13 +230,13 @@ namespace MyCaseLog
             if (snaps.Count>0)
             {
                 ws.Cells[rowIDX, 15].Formula = $"HYPERLINK(\"{e.LogStudyPath}\", \"{e.LogTSID}\")";
-                int i = 1;
-                foreach (Bitmap img in snaps)
-                {
-                    string savingPath = Path.GetDirectoryName(Application.ExecutablePath) + "\\Screenshot_" + DateTime.Now.ToString("yyyyMMddhhmmss") + $"_{i}.jpeg";
-                    img.Save(savingPath, ImageFormat.Jpeg);
-                    i++;
-                }
+                //int i = 1;
+                //foreach (Bitmap img in snaps)
+                //{
+                //    string savingPath = Path.GetDirectoryName(Application.ExecutablePath) + "\\Screenshot_" + DateTime.Now.ToString("yyyyMMddhhmmss") + $"_{i}.jpeg";
+                //    img.Save(savingPath, ImageFormat.Jpeg);
+                //    i++;
+                //}
             }
            
             pck.Save();
