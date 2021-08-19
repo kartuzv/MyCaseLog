@@ -45,13 +45,13 @@ namespace MyCaseLog
 			this.btnSaveToLog.Name = "btnSaveToLog";
 			this.btnSaveToLog.Size = new System.Drawing.Size(170, 47);
 			this.btnSaveToLog.TabIndex = 0;
-			this.btnSaveToLog.Text = "Save To Log";
+			this.btnSaveToLog.Text = "Add To CaseLog";
 			this.btnSaveToLog.UseVisualStyleBackColor = true;
 			this.btnSaveToLog.Click += new System.EventHandler(this.btnSaveToLog_Click);
 			// 
 			// txtViewerTitle
 			// 
-			this.txtViewerTitle.Location = new System.Drawing.Point(78, 112);
+			this.txtViewerTitle.Location = new System.Drawing.Point(78, 137);
 			this.txtViewerTitle.Name = "txtViewerTitle";
 			this.txtViewerTitle.Size = new System.Drawing.Size(176, 23);
 			this.txtViewerTitle.TabIndex = 1;
@@ -60,7 +60,7 @@ namespace MyCaseLog
 			// label1
 			// 
 			this.label1.AutoSize = true;
-			this.label1.Location = new System.Drawing.Point(30, 115);
+			this.label1.Location = new System.Drawing.Point(30, 140);
 			this.label1.Name = "label1";
 			this.label1.Size = new System.Drawing.Size(42, 15);
 			this.label1.TabIndex = 2;
@@ -82,13 +82,9 @@ namespace MyCaseLog
 			// 
 			this.cboHosp.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
 			this.cboHosp.FormattingEnabled = true;
-			this.cboHosp.Items.AddRange(new object[] {
-            "Hospital A",
-            "University B",
-            "Med Center C"});
-			this.cboHosp.Location = new System.Drawing.Point(78, 78);
+			this.cboHosp.Location = new System.Drawing.Point(21, 99);
 			this.cboHosp.Name = "cboHosp";
-			this.cboHosp.Size = new System.Drawing.Size(176, 23);
+			this.cboHosp.Size = new System.Drawing.Size(233, 23);
 			this.cboHosp.TabIndex = 4;
 			// 
 			// label2
@@ -105,15 +101,17 @@ namespace MyCaseLog
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-			this.ClientSize = new System.Drawing.Size(266, 144);
+			this.ClientSize = new System.Drawing.Size(266, 132);
 			this.Controls.Add(this.label2);
 			this.Controls.Add(this.cboHosp);
 			this.Controls.Add(this.btnOpenLogDir);
 			this.Controls.Add(this.label1);
 			this.Controls.Add(this.txtViewerTitle);
 			this.Controls.Add(this.btnSaveToLog);
+			this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
 			this.Name = "CaseLogForm";
-			this.Text = "CaseLogForm";
+			this.Text = "MyCaseLog";
+			this.Load += new System.EventHandler(this.CaseLogForm_Load);
 			this.Shown += new System.EventHandler(this.CaseLogForm_Shown);
 			this.ResumeLayout(false);
 			this.PerformLayout();

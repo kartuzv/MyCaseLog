@@ -25,10 +25,17 @@ namespace MyCaseLog.Properties {
         
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("C:\\Users\\kartuzv\\source\\repos\\MyCaseLog\\LogArchive")]
         public string LogDir {
             get {
                 return ((string)(this["LogDir"]));
+            }
+        }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        public string Locations {
+            get {
+                return ((string)(this["Locations"]));
             }
         }
     }

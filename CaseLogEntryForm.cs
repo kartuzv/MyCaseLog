@@ -136,7 +136,7 @@ namespace MyCaseLog
             e.IsSocietyConference = chkSocConf.Checked;
 
             SaveEntryToExcel(e);
-            Debug.WriteLine(e.ToString());
+            //Debug.WriteLine(e.ToString());
 
             //if (_gotSnapshot && chkSnap.Checked)
             //{
@@ -150,7 +150,7 @@ namespace MyCaseLog
                 if (!Directory.Exists(e.LogStudyPath))
                     Directory.CreateDirectory(e.LogStudyPath);
 
-                              int i = 1;
+                int i = 1;
                 foreach (Bitmap img in snaps)
                 {
                     string savingPath = e.LogStudyPath + "\\Screenshot_" + DateTime.Now.ToString("yyyyMMddhhmmss") + $"_{i}.jpeg";
@@ -209,7 +209,7 @@ namespace MyCaseLog
 
             }
             rowIDX = lastLogRowIDX;
-            Debug.WriteLine(rowIDX);
+            //Debug.WriteLine(rowIDX);
 
             ws.Cells[rowIDX, 1].Value = e.LogTSID;
             ws.Cells[rowIDX, 2].Value = e.Hosp;
