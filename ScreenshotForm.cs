@@ -8,7 +8,7 @@ namespace MyCaseLog
 	public partial class ScreenshotForm : Form
 	{
         public Bitmap bmp;
-        public CaseLogEntryForm frm;
+        public CaseLogForm2 frm;
         int imgIndex = -1;
         public ScreenshotForm(Bitmap img, int index)
         {

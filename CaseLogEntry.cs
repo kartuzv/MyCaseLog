@@ -1,4 +1,6 @@
-﻿namespace MyCaseLog
+﻿using System.Drawing;
+
+namespace MyCaseLog
 {
 	public class CaseLogEntry
 	{
@@ -21,5 +23,9 @@
 		public string BillAmount { get; set; }
 		
 		public string Hosp { get; set; }
+
+		public string Dx { get; set; }
+
+		public System.Collections.Generic.List<Bitmap> snaps = new System.Collections.Generic.List<Bitmap>();
 	}
 }

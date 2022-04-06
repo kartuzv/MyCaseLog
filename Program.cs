@@ -17,7 +17,7 @@ namespace MyCaseLog
 			Application.SetHighDpiMode(HighDpiMode.SystemAware);
 			Application.EnableVisualStyles();
 			Application.SetCompatibleTextRenderingDefault(false);
-			Application.Run(new CaseLogForm());
+			Application.Run(new CaseLogForm2());
 		}
 	}
 }

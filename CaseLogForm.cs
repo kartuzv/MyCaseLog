@@ -63,9 +63,19 @@ namespace MyCaseLog
 			Process.Start("explorer.exe", Properties.Settings.Default.LogDir); 
 		}
 
-		private void label2_MouseClick(object sender, MouseEventArgs e)
+		private void lstCollections_SelectedIndexChanged(object sender, EventArgs e)
 		{
+			//string colName = lstCollections.SelectedItem.ToString();
+
 			
+
+			
+		}
+
+		private void btnPPTEST_Click(object sender, EventArgs e)
+		{
+			var pp = new Controllers.PowerPointController();
+			pp.RunTEST();
 		}
 	}
 }

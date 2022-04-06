@@ -14,7 +14,7 @@ namespace MyCaseLog
     public partial class SelectArea : Form
     {
 
-        public CaseLogEntryForm frm;
+        public CaseLogForm2 frm;
 
         //Moving window by click-drag on a control https://stackoverflow.com/a/13477624/5260872
         public const int WM_NCLBUTTONDOWN = 0xA1;
@@ -101,6 +101,8 @@ namespace MyCaseLog
             this.Hide();
             ScreenshotForm save = new ScreenshotForm(this.Location.X, this.Location.Y, this.Width, this.Height, this.Size);
             save.frm = frm;
+            save.StartPosition =  FormStartPosition.Manual;
+            save.Location = this.Location;
             save.Show();
         }
     }
