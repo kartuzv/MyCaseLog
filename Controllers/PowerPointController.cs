@@ -12,9 +12,10 @@ using P14 = DocumentFormat.OpenXml.Office2010.PowerPoint;
 using Ap = DocumentFormat.OpenXml.ExtendedProperties;
 using Vt = DocumentFormat.OpenXml.VariantTypes;
 
-using ShapeCrawler;
+//using ShapeCrawler;
 using MyCaseLog.Properties;
 using System.Text;
+using System.Drawing;
 
 namespace MyCaseLog.Controllers
 {
@@ -34,10 +35,10 @@ namespace MyCaseLog.Controllers
                     ChangeParts();
                 }
                 else
-                { 
+                {
                     //need to import another slide
                 }
-               
+
             }
         }
 
@@ -48,9 +49,9 @@ namespace MyCaseLog.Controllers
             //Adds new parts or new relationships.
             AddParts();
             //Changes the contents of the specified parts.
-           
+
             ChangeThumbnailPart1(((ThumbnailPart)UriPartDictionary["/docProps/thumbnail.jpeg"]));
-           
+
             ChangeSlidePart1(((SlidePart)UriPartDictionary["/ppt/slides/slide1.xml"]));
             ChangeNotesSlidePart1(((NotesSlidePart)UriPartDictionary["/ppt/notesSlides/notesSlide1.xml"]));
 
@@ -270,15 +271,6 @@ namespace MyCaseLog.Controllers
             paragraph1.InsertBefore(run1, endParagraphRunProperties1);
         }
 
-        #region Binary Data
-        //private string thumbnailPart1Data = "/9j/4AAQSkZJRgABAQEAYABgAAD/2wBDAAMCAgMCAgMDAwMEAwMEBQgFBQQEBQoHBwYIDAoMDAsKCwsNDhIQDQ4RDgsLEBYQERMUFRUVDA8XGBYUGBIUFRT/2wBDAQMEBAUEBQkFBQkUDQsNFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBT/wAARCACQAQADASIAAhEBAxEB/8QAHwAAAQUBAQEBAQEAAAAAAAAAAAECAwQFBgcICQoL/8QAtRAAAgEDAwIEAwUFBAQAAAF9AQIDAAQRBRIhMUEGE1FhByJxFDKBkaEII0KxwRVS0fAkM2JyggkKFhcYGRolJicoKSo0NTY3ODk6Q0RFRkdISUpTVFVWV1hZWmNkZWZnaGlqc3R1dnd4eXqDhIWGh4iJipKTlJWWl5iZmqKjpKWmp6ipqrKztLW2t7i5usLDxMXGx8jJytLT1NXW19jZ2uHi4+Tl5ufo6erx8vP09fb3+Pn6/8QAHwEAAwEBAQEBAQEBAQAAAAAAAAECAwQFBgcICQoL/8QAtREAAgECBAQDBAcFBAQAAQJ3AAECAxEEBSExBhJBUQdhcRMiMoEIFEKRobHBCSMzUvAVYnLRChYkNOEl8RcYGRomJygpKjU2Nzg5OkNERUZHSElKU1RVVldYWVpjZGVmZ2hpanN0dXZ3eHl6goOEhYaHiImKkpOUlZaXmJmaoqOkpaanqKmqsrO0tba3uLm6wsPExcbHyMnK0tPU1dbX2Nna4uPk5ebn6Onq8vP09fb3+Pn6/9oADAMBAAIRAxEAPwD9U6KKKAOe1fxBdWPizQ9MiSI2175nmsykuNqMw2nOByozkHrWJZeNvEU1rMsvh2UXAsjcxzeTKiNLsU+VsKkg7iy8kZ2E8ZFd5RQB59ffE/UbBYJJvC11DDNGuJLiRowsuTlGzHxgKee/pjmtK68aapDqkltD4ZvJbZLiSE3R3quFVSJAAhJUksOM/d43ZxXX0UAcFefEDWbKG1hPhm5nvprKO42xiTbvZV3oBszlCeQSOO+SBV2HxhrEt1Gknh24t4gnmyN87kqYGkCrhANwYKhBPU4APUdhRQBxNp431y8ktkPhe5s1la2zJMXYKsjIJAQE4ZAzdcD5ckjoYz48161tGa48JXk00dtHK32YsVd2VSUUbcggnB9CO+CR3VFAHGSeNtYhsnm/4Rq6mmaR1it4xICFWBXG5inUuSnAxwcbscx/8JprzRyTDwzcBY0hb7PhzISyzFxuKgcFI+m44fkZO0dvRQBxvhTx7d+JNSe1l0OaxWN5I5JGl3+WyY4YbRjJ3gc/w+9dlRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFAH/9k=";
-
-        private System.IO.Stream GetBinaryDataStream(string base64String)
-        {
-            return new System.IO.MemoryStream(System.Convert.FromBase64String(base64String));
-        }
-
-        #endregion
 
         //  InsertNewSlide(@"..\..\Documents\Myppt2.pptx", 1, "My new slide");
 
@@ -423,34 +415,96 @@ namespace MyCaseLog.Controllers
 
         public void AddMyCaseToCollection(CaseLogEntry e)
         {
-            string pathToPPSlides = EnsurePPSlideCollectionExists(e.BodyPart);
+            string pathToPPSlides = EnsurePPSlideCollectionExists(e.Specialty);
 
-            //using IPresentation presentation = SCPresentation.Open(pathToPPSlides, isEditable: true);
+            using (document = PresentationDocument.Open(pathToPPSlides, true))
+            {
+                var presentationPart = document.PresentationPart;
 
-            //ISlide slide = presentation.Slides.Last();
+                int lastSlideIdx = 0;
+                //SlidePart lastSlidePart = GetLastSlide(document, out lastSlideIdx);
+                SlidePart firstSlideAsTemplate = presentationPart.GetSlidePartsInOrder().First();
+                SlidePart targetSlide = null;
+                int slideCount = document.PresentationPart.SlideParts.Count();
+                if (slideCount == 1)
+                {
+                    //has 'template' already been used? it title one?
+                    string lastSlideTitle = GetSlideTitle(firstSlideAsTemplate);
+                    if (lastSlideTitle == "")
+                    {
+                        //not used yet template slide 1st is our 1st target
+                        targetSlide = firstSlideAsTemplate;
+                    }
+                }
 
-            // Get picture shape
-            //IAutoShape autoShape = slide.Shapes.OfType<IAutoShape>().Skip(1).First();//.Shapes.OfType<IPicture>().First();
-            //IAutoShape picture2 = slide.Shapes  //.OfType<IPicture>().Skip(1).First();
-            //autoShape.Placeholder.
-            // Change image
-            //picture1.Image.SetImage(e.snaps[0].ToByteArray(System.Drawing.Imaging.ImageFormat.Jpeg));
-            //picture2.Image.SetImage(e.snaps[1].ToByteArray(System.Drawing.Imaging.ImageFormat.Jpeg));
+                int slidesTotal = (int)Math.Round(e.snaps.Count / 2.0);
 
+                AddCaseSlideToPresentation(presentationPart, firstSlideAsTemplate, e, 1, slidesTotal,targetSlide);
 
-            // Save changes
-            //presentation.Save();
-
-            //last slide should be blank?
+            }
         }
 
-        private static string EnsurePPSlideCollectionExists(string bodyPart)
+        private void AddCaseSlideToPresentation(PresentationPart p, SlidePart templateSlide, CaseLogEntry e, int caseSlideNbr=1,int caseSlidesTotal=1, SlidePart targetSlide=null)
+        {
+            int slideCount = p.SlideParts.Count();
+
+            if (targetSlide == null)
+            {
+                targetSlide = templateSlide.CloneSlide();
+                p.AppendSlide(targetSlide);
+                // Save the modified presentation.
+                p.Presentation.Save();
+            }
+            
+            string slideTitle = $"[{caseSlideNbr}/{caseSlidesTotal}] {e.Specialty}|{e.BodyPart}|{e.PTIdType}:{e.PTMRN}|{DateTime.Now}";
+            string slideNotes = $"{e.Notes}{Environment.NewLine}{e.Tags}";
+            
+            SetSlideTitle(targetSlide, slideTitle);
+
+            if (targetSlide.NotesSlidePart == null)
+            {
+                NotesSlidePart newNotesSlidePart = targetSlide.AddNewPart<NotesSlidePart>("rId2");
+                GenerateNotesSlidePartContent(newNotesSlidePart, slideNotes, slideCount);
+            }
+            else { SetSlideNotes(targetSlide, slideNotes); }
+
+            //left
+            long imgEmuWidthIsCx = e.snaps.ElementAt(0).Width * 9525;
+            
+            SlideSize slideSize = p.Presentation.GetFirstChild<SlideSize>();
+            int maxHeight = slideSize.Cy;
+
+            if (e.snaps.Count > 0)
+            {
+                AddImage(targetSlide, e.snaps.ElementAt(0), false);
+                e.snaps.RemoveAt(0);
+            }
+            //right
+            if (e.snaps.Count > 0)
+            {
+                AddImage(targetSlide, e.snaps.ElementAt(0), true);
+                e.snaps.RemoveAt(0);
+            }
+            p.Presentation.Save();
+
+            if (e.snaps.Count > 0)
+                AddCaseSlideToPresentation(p, templateSlide, e, caseSlideNbr + 1,caseSlidesTotal);
+
+            //AddImage(lastSlidePart, testImgLeft, ImagePartType.Jpeg, false);
+            //AddImage(lastSlidePart, testImgRight, ImagePartType.Jpeg, false);
+            //RemoveImage(lastSlidePart, 2);
+            //RemoveImage(lastSlidePart, 1);
+
+
+        }
+
+        private static string EnsurePPSlideCollectionExists(string specialty)
         {
             //ensure slideCollection exists
-            string pathToSlideCollection = Settings.Default.LogDir + $"\\MCL_{bodyPart}.pptx";
+            string pathToSlideCollection = Settings.Default.LogDir + $"\\MCL_{specialty}.pptx";
             if (!File.Exists(pathToSlideCollection))
             {
-                string pathToPPTemplate = Settings.Default.LogDir + $"\\PPT_Slide1_2pic_Blank.pptx";
+                string pathToPPTemplate = Settings.Default.LogDir + $"\\PPTw2Pic.pptx";
                 File.Copy(pathToPPTemplate, pathToSlideCollection);
 
                 //string pathToPPBlankSlide = Settings.Default.LogDir + $"\\PPT_Slide1_2pic.pptx";
@@ -530,12 +584,18 @@ namespace MyCaseLog.Controllers
             return "X";
         }
 
-        public static void AddImage(SlidePart slidePart, byte[] imgAsByteArray, ImagePartType imgType, bool isRightSidePic)
+        public static void AddImage(SlidePart slidePart, System.Drawing.Bitmap img , bool isRightSidePic)
         {
+            int emuPerPixel = 9525;
+            Size orgSize = img.Size;
+            Size resizedImage = CalculateDimensions(orgSize, 680);//max height of 1-half is 680 for WIDE-Screen SLIIDE
+            long imageWidthEMU = (long)(resizedImage.Width * emuPerPixel);
+            long imageHeightEMU = (long)(resizedImage.Height * emuPerPixel);
+            //e.Cx = imageWidthEMU; e.Cy = imageHeightEMU;
 
-            var imgPart = slidePart.AddImagePart(imgType);
+            var imgPart = slidePart.AddImagePart(ImagePartType.Jpeg);
 
-            using (MemoryStream stream = new MemoryStream(imgAsByteArray))
+            using (MemoryStream stream = new MemoryStream(img.ToByteArray(System.Drawing.Imaging.ImageFormat.Jpeg)))
             {
                 imgPart.FeedData(stream);
             }
@@ -597,29 +657,30 @@ namespace MyCaseLog.Controllers
             {
                 picture.ShapeProperties.Transform2D.Append(new DocumentFormat.OpenXml.Drawing.Offset
                 {
-                    X = 6657974L,
-                    Y = 435266L
-                });
+                    X = 6099349L,
+                    Y = 351693L
+                });//640left 36px top
                 picture.ShapeProperties.Transform2D.Append(new DocumentFormat.OpenXml.Drawing.Extents
-                {
-                    Cx = 4486275L,
-                    Cy = 6422734L
+				{
+                    Cx = imageWidthEMU,
+                    Cy = imageHeightEMU
                 });
-            }
-            else
+			}
+			else
             {
                 picture.ShapeProperties.Transform2D.Append(new DocumentFormat.OpenXml.Drawing.Offset
-                {
-                    X = 788468L,
-                    Y = 438150L
-                });
-                picture.ShapeProperties.Transform2D.Append(new DocumentFormat.OpenXml.Drawing.Extents
-                {
-                    Cx = 4319039L,
-                    Cy = 6183313L
+                {                    
+                    X = 0L,
+                    Y = 351694L 
+                });//0left 36px top
+
+				picture.ShapeProperties.Transform2D.Append(new DocumentFormat.OpenXml.Drawing.Extents
+				{
+                    Cx = imageWidthEMU,
+                    Cy = imageHeightEMU
                 });
 
-            }
+			}
 
 
             picture.ShapeProperties.Append(new DocumentFormat.OpenXml.Drawing.PresetGeometry
@@ -704,6 +765,12 @@ namespace MyCaseLog.Controllers
 
             A.RunProperties runProperties1 = new A.RunProperties() { Language = "en-US", FontSize = 2000, Dirty = false };
             runProperties1.SetAttribute(new OpenXmlAttribute("", "smtClean", "", "0"));
+
+            A.SolidFill solidFill1 = new A.SolidFill();
+            A.SchemeColor schemeColor1 = new A.SchemeColor() { Val = A.SchemeColorValues.Background1 };
+            solidFill1.Append(schemeColor1);
+            runProperties1.Append(solidFill1);
+
             A.Text text1 = new A.Text();
             text1.Text = title;
 
@@ -1085,37 +1152,6 @@ namespace MyCaseLog.Controllers
             return false;
         }
 
-        public static int GetNextBlankSlideIndex(string pathToPPT)
-        {
-            int nextBlankSlide = 1;
-            string pathToSrcPPT = Settings.Default.LogDir + $"\\PPT_Slide1_2pic_Blank.pptx";
-            
-            using IPresentation presentation = SCPresentation.Open(pathToPPT, true);
-            nextBlankSlide = presentation.Slides.Count();
-            ISlide removingSlide = presentation.Slides.First();
-
-            return nextBlankSlide;
-        }
-        public static void AddBlank2PicSlide(string pathToSrcPPT, string pathToDestPPT)
-        {
-            //using IPresentation presentation = SCPresentation.Open(pathToDestPPT, true);
-            //ISlide removingSlide = presentation.Slides.First();
-            //presentation.Slides.Remove(removingSlide);
-
-            //// Move second slide to first position
-            //presentation.Slides[1].Number = 2;
-
-            // Copy second slide from source into dest
-            using IPresentation source = SCPresentation.Open(pathToSrcPPT, true);
-            using IPresentation dest = SCPresentation.Open(pathToDestPPT, true);
-            
-            ISlide copyingSlide = source.Slides[0];
-            dest.Slides.Add(copyingSlide);
-
-            // Save changes
-            dest.Save();
-        }
-
         // Count the slides in the presentation.
         public int CountSlides()
         {
@@ -1138,6 +1174,25 @@ namespace MyCaseLog.Controllers
 
             // Return the slide count to the previous method.
             return slidesCount;
+        }
+
+        public static Size CalculateDimensions(Size oldSize, int maxDimention)
+        {           
+            if (oldSize.Width <= maxDimention && oldSize.Height <= maxDimention)
+                return oldSize;
+
+            Size newSize = new Size();
+            if (oldSize.Width > oldSize.Height)
+            {
+                newSize.Width = maxDimention;
+                newSize.Height = (int)(oldSize.Height * (float)maxDimention / (float)oldSize.Width);
+            }
+            else
+            {
+                newSize.Width = (int)(oldSize.Width * (float)maxDimention / (float)oldSize.Height);
+                newSize.Height = maxDimention;
+            }
+            return newSize;
         }
 
         //public static void AddPictureToSlide()

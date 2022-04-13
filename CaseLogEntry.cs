@@ -6,11 +6,12 @@ namespace MyCaseLog
 	{
 		public string LogTSID { get; set; }
 		public string Modality { get; set; }
-
+		public string Specialty { get; set; }
 		public string BodyPart { get; set; }
 		public string Protocol { get; set; }
 		public string PTSex { get; set; }
 		public string PTAge { get; set; }
+		public string PTIdType { get; set; }
 		public string PTMRN { get; set; }
 		public string StudyAcc { get; set; }
 		public string StudyDesc { get; set; }
@@ -25,7 +26,8 @@ namespace MyCaseLog
 		public string Hosp { get; set; }
 
 		public string Dx { get; set; }
-
+		public string Tags { get; set; }
+		public string Notes { get; set; }
 		public System.Collections.Generic.List<Bitmap> snaps = new System.Collections.Generic.List<Bitmap>();
 	}
 }

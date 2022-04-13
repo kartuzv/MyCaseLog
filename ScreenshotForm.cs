@@ -40,6 +40,7 @@ namespace MyCaseLog
             {
                 frm.AddScreenshotCapturedBMP(bmp);
                 this.Hide();
+                frm.Show();
             }
             else
                 this.Close();
