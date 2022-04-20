@@ -13,7 +13,7 @@ using Ap = DocumentFormat.OpenXml.ExtendedProperties;
 using Vt = DocumentFormat.OpenXml.VariantTypes;
 
 //using ShapeCrawler;
-using MyCaseLog.Properties;
+//using MyCaseLog.Properties;
 using System.Text;
 using System.Drawing;
 
@@ -24,7 +24,18 @@ namespace MyCaseLog.Controllers
         private IDictionary<string, OpenXmlPart> UriPartDictionary = new Dictionary<string, OpenXmlPart>();
         private IDictionary<string, DataPart> UriNewDataPartDictionary = new Dictionary<string, DataPart>();
         private PresentationDocument document;
+        string pathToPPTemplate = "";//Settings.Default.LogDir + $"PPTemplate2Pic.pptx";
+        string logPath = "";
+        SlidePart blankTemplateSlidePart = null;
+        private PresentationDocument _templateDoc;
 
+        public PowerPointController(string pathToLogFolder, string pptTemplatePath)
+        {
+
+            pathToPPTemplate = pptTemplatePath;
+            logPath = pathToLogFolder;
+
+        }
         public void InitPPPackageForCollection(string filePath)
         {
             using (document = PresentationDocument.Open(filePath, true))
@@ -417,6 +428,8 @@ namespace MyCaseLog.Controllers
         {
             string pathToPPSlides = EnsurePPSlideCollectionExists(e.Specialty);
 
+            LoadTemplateSlidePart();//load template into memory
+
             using (document = PresentationDocument.Open(pathToPPSlides, true))
             {
                 var presentationPart = document.PresentationPart;
@@ -437,11 +450,13 @@ namespace MyCaseLog.Controllers
                     }
                 }
 
-                int slidesTotal = (int)Math.Round(e.snaps.Count / 2.0);
+                int slidesTotal = (e.snaps.Count % 2)==1? (e.snaps.Count+1)/2: e.snaps.Count/2;
 
                 AddCaseSlideToPresentation(presentationPart, firstSlideAsTemplate, e, 1, slidesTotal,targetSlide);
 
             }
+
+            _templateDoc.Dispose();
         }
 
         private void AddCaseSlideToPresentation(PresentationPart p, SlidePart templateSlide, CaseLogEntry e, int caseSlideNbr=1,int caseSlidesTotal=1, SlidePart targetSlide=null)
@@ -452,8 +467,11 @@ namespace MyCaseLog.Controllers
             {
                 targetSlide = templateSlide.CloneSlide();
                 p.AppendSlide(targetSlide);
-                // Save the modified presentation.
                 p.Presentation.Save();
+
+                //targetSlide = p.AddBlankSlideFromTemplate(pathToPPTemplate);
+                
+                //targetSlide = AddNewSlideFromTemplate(p);
             }
             
             string slideTitle = $"[{caseSlideNbr}/{caseSlidesTotal}] {e.Specialty}|{e.BodyPart}|{e.PTIdType}:{e.PTMRN}|{DateTime.Now}";
@@ -469,10 +487,10 @@ namespace MyCaseLog.Controllers
             else { SetSlideNotes(targetSlide, slideNotes); }
 
             //left
-            long imgEmuWidthIsCx = e.snaps.ElementAt(0).Width * 9525;
+            //long imgEmuWidthIsCx = e.snaps.ElementAt(0).Width * 9525;
             
-            SlideSize slideSize = p.Presentation.GetFirstChild<SlideSize>();
-            int maxHeight = slideSize.Cy;
+            //SlideSize slideSize = p.Presentation.GetFirstChild<SlideSize>();
+            //int maxHeight = slideSize.Cy;
 
             if (e.snaps.Count > 0)
             {
@@ -498,13 +516,26 @@ namespace MyCaseLog.Controllers
 
         }
 
-        private static string EnsurePPSlideCollectionExists(string specialty)
+        private SlidePart AddNewSlideFromTemplate(PresentationPart p)
+        {
+            SlidePart newSlidePartClode = p.AddNewPart<SlidePart>();
+
+            Slide clonedSlideContentFromTemplate = (Slide)blankTemplateSlidePart.Slide.CloneNode(true);
+            clonedSlideContentFromTemplate.Save(newSlidePartClode);
+            newSlidePartClode.AddPart(blankTemplateSlidePart.SlideLayoutPart);
+
+            p.AppendSlide(newSlidePartClode);
+            p.Presentation.Save();
+
+            return newSlidePartClode;
+        }
+
+        private string EnsurePPSlideCollectionExists(string specialty)
         {
             //ensure slideCollection exists
-            string pathToSlideCollection = Settings.Default.LogDir + $"\\MCL_{specialty}.pptx";
+            string pathToSlideCollection = logPath + $"MCL_{specialty}.pptx";
             if (!File.Exists(pathToSlideCollection))
             {
-                string pathToPPTemplate = Settings.Default.LogDir + $"\\PPTw2Pic.pptx";
                 File.Copy(pathToPPTemplate, pathToSlideCollection);
 
                 //string pathToPPBlankSlide = Settings.Default.LogDir + $"\\PPT_Slide1_2pic.pptx";
@@ -517,12 +548,20 @@ namespace MyCaseLog.Controllers
             return pathToSlideCollection;
         }
 
+        private void LoadTemplateSlidePart()
+        {
+            _templateDoc = PresentationDocument.Open(pathToPPTemplate, false);
+
+            blankTemplateSlidePart = _templateDoc.PresentationPart.GetSlidePartsInOrder().First();
+
+        }
+
         public string RunTEST()
         {
-            string pptTESTFile = Settings.Default.LogDir + $"\\MCL_head.pptx";
+            string pptTESTFile = logPath + $"\\MCL_head.pptx";
 
-            string testImgPathLeft = Settings.Default.LogDir + $"\\DxRadHand.jpg";
-            string testImgPathRight = Settings.Default.LogDir + $"\\rightimg.jpg";
+            string testImgPathLeft = logPath + $"\\DxRadHand.jpg";
+            string testImgPathRight = logPath + $"\\rightimg.jpg";
             byte[] testImgLeft = File.ReadAllBytes(testImgPathLeft);
             byte[] testImgRight = File.ReadAllBytes(testImgPathRight);
 
@@ -605,9 +644,14 @@ namespace MyCaseLog.Controllers
                     .Descendants<DocumentFormat.OpenXml.Presentation.ShapeTree>()
                     .First();
 
-            //Shape shape2 = tree.Elements<Shape>().ElementAt(1);//getplaceholder?
+            if (isRightSidePic)//remove last shape (placeholder)
+            {
+                //last appended shape
+                tree.ElementAt(tree.ChildElements.Count - 1).Remove();
+            }
 
             int picChildIDinTree = tree.ChildElements.Count - 1;
+            
             Picture picture = new DocumentFormat.OpenXml.Presentation.Picture();
 
             picture.NonVisualPictureProperties = new DocumentFormat.OpenXml.Presentation.NonVisualPictureProperties();
@@ -651,8 +695,13 @@ namespace MyCaseLog.Controllers
             picture.Append(blipFill);
 
             picture.ShapeProperties = new DocumentFormat.OpenXml.Presentation.ShapeProperties();
+            picture.ShapeProperties.Append(new DocumentFormat.OpenXml.Drawing.PresetGeometry
+            {
+                Preset = DocumentFormat.OpenXml.Drawing.ShapeTypeValues.Rectangle
+            });
+
             picture.ShapeProperties.Transform2D = new DocumentFormat.OpenXml.Drawing.Transform2D();
-            //left side
+
             if (isRightSidePic)
             {
                 picture.ShapeProperties.Transform2D.Append(new DocumentFormat.OpenXml.Drawing.Offset
@@ -665,8 +714,12 @@ namespace MyCaseLog.Controllers
                     Cx = imageWidthEMU,
                     Cy = imageHeightEMU
                 });
-			}
-			else
+
+                //share1 at 0 is slide title box, then pic-left, then shape(placeholder added before) as shape2 
+                //Shape shape2 = tree.Elements<Shape>().ElementAt(1);
+                //shape2.Remove();
+            }
+            else //LEFT Picture (top-left, first half, + righ placehoolder)
             {
                 picture.ShapeProperties.Transform2D.Append(new DocumentFormat.OpenXml.Drawing.Offset
                 {                    
@@ -682,13 +735,61 @@ namespace MyCaseLog.Controllers
 
 			}
 
-
-            picture.ShapeProperties.Append(new DocumentFormat.OpenXml.Drawing.PresetGeometry
-            {
-                Preset = DocumentFormat.OpenXml.Drawing.ShapeTypeValues.Rectangle
-            });
-
             tree.Append(picture);
+
+            //FOR LEFT pic need to add placeholder
+            if (!isRightSidePic)
+            {
+                Shape shape1 = new Shape();
+
+                NonVisualShapeProperties nonVisualShapeProperties1 = new NonVisualShapeProperties();
+                NonVisualDrawingProperties nonVisualDrawingProperties1 = new NonVisualDrawingProperties() { Id = (UInt32Value)20U, Name = "Right-side Placeholder" };
+
+                NonVisualShapeDrawingProperties nonVisualShapeDrawingProperties1 = new NonVisualShapeDrawingProperties();
+                A.ShapeLocks shapeLocks1 = new A.ShapeLocks() { NoGrouping = true };
+
+                nonVisualShapeDrawingProperties1.Append(shapeLocks1);
+
+                ApplicationNonVisualDrawingProperties applicationNonVisualDrawingProperties1 = new ApplicationNonVisualDrawingProperties();
+                PlaceholderShape placeholderShape1 = new PlaceholderShape() { Size = PlaceholderSizeValues.Half, Index = (UInt32Value)2U };
+
+                applicationNonVisualDrawingProperties1.Append(placeholderShape1);
+
+                nonVisualShapeProperties1.Append(nonVisualDrawingProperties1);
+                nonVisualShapeProperties1.Append(nonVisualShapeDrawingProperties1);
+                nonVisualShapeProperties1.Append(applicationNonVisualDrawingProperties1);
+
+                ShapeProperties shapeProperties2 = new ShapeProperties();
+
+                A.Transform2D transform2D2 = new A.Transform2D();
+                A.Offset offset2 = new A.Offset() { X = 6144426L, Y = 351692L };
+                A.Extents extents2 = new A.Extents() { Cx = 5973510L, Cy = 6506307L };
+
+                transform2D2.Append(offset2);
+                transform2D2.Append(extents2);
+
+                shapeProperties2.Append(transform2D2);
+
+                TextBody textBody1 = new TextBody();
+                A.BodyProperties bodyProperties1 = new A.BodyProperties();
+                A.ListStyle listStyle1 = new A.ListStyle();
+
+                A.Paragraph paragraph1 = new A.Paragraph();
+                A.EndParagraphRunProperties endParagraphRunProperties1 = new A.EndParagraphRunProperties() { Language = "en-US", Dirty = false };
+
+                paragraph1.Append(endParagraphRunProperties1);
+
+                textBody1.Append(bodyProperties1);
+                textBody1.Append(listStyle1);
+                textBody1.Append(paragraph1);
+
+                shape1.Append(nonVisualShapeProperties1);
+                shape1.Append(shapeProperties2);
+                shape1.Append(textBody1);
+                tree.Append(shape1);
+
+            }
+           
             //tree.InsertBefore(picture, shape2);
         }
 
@@ -1240,6 +1341,41 @@ public static class OpenXmlUtils
 
         // copy layout part
         slidePartClone.AddPart(templatePart.SlideLayoutPart);
+        var tree = slidePartClone
+                    .Slide
+                    .Descendants<DocumentFormat.OpenXml.Presentation.ShapeTree>()
+                    .First();
+        //0,1,2
+        for (int i = tree.ChildElements.Count - 1; i > 2; i--)
+            tree.ElementAt(i).Remove();
+
+        return slidePartClone;
+    }
+
+    public static SlidePart AddBlankSlideFromTemplate(this PresentationPart p, string pathToTemplate)
+    {
+        SlidePart slidePartClone = null;
+        using (PresentationDocument document = PresentationDocument.Open(pathToTemplate, false))
+        {
+            var presentationPart = document.PresentationPart;
+
+            int lastSlideIdx = 0;
+            
+            SlidePart templateSlidePart = presentationPart.GetSlidePartsInOrder().First();
+            Slide currentSlide = (Slide)templateSlidePart.Slide.CloneNode(true);
+
+            slidePartClone = p.AddNewPart<SlidePart>();
+            currentSlide.Save(slidePartClone);
+
+            // copy layout part
+            slidePartClone.AddPart(templateSlidePart.SlideLayoutPart);
+        }
+        if (slidePartClone != null)
+        {
+            p.AppendSlide(slidePartClone);
+            // Save the modified presentation.
+            p.Presentation.Save();
+        }
 
         return slidePartClone;
     }

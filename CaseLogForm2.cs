@@ -13,7 +13,9 @@ namespace MyCaseLog
         List<Bitmap> snaps;
         bool deleteInProgress = false;
         //bool _gotSnapshot = false;
-
+        string xlsTemplatePath = "";
+        string pptxTemplatePath = "";
+        SelectArea fSA;
         public CaseLogForm2()
 		{
 			InitializeComponent();
@@ -21,15 +23,71 @@ namespace MyCaseLog
             this.Location = new Point((Screen.PrimaryScreen.WorkingArea.Width - this.Width) / 2, Screen.PrimaryScreen.WorkingArea.Height - this.Height);
             this.WindowState = FormWindowState.Minimized;
 
+            fSA = new SelectArea();
+            fSA.frm = this;
+            fSA.StartPosition = FormStartPosition.Manual;
+            fSA.Location = this.Location;
+        }
+
+        private void CaseLogForm2_Load(object sender, EventArgs e)
+        {
+            if (Settings.Default.UsrSpecialty != "")
+            {
+                cboSpecialty.SelectedItem = Settings.Default.UsrSpecialty;
+                chkKeepSpecialty.Checked = true;
+            }
+
+            if (Settings.Default.UsrBodyPart != "")
+            {
+                cboBodyPart.SelectedItem = Settings.Default.UsrBodyPart;
+                chkKeepBodyPart.Checked = true;
+            }
+
+            //ensure ppt template is ready
+            //next to exe.
+            string applicationDirectory = Path.GetDirectoryName(Application.ExecutablePath);
+            string templateDir = applicationDirectory + "\\Template";
+            if (!Directory.Exists(templateDir))
+                Directory.CreateDirectory(templateDir);
+
+            xlsTemplatePath = templateDir + "\\MyCaseLog.xlsx";
+            pptxTemplatePath = templateDir + "\\PPTemplate2Pic.pptx";
+
+            if (!File.Exists(xlsTemplatePath))
+                File.WriteAllBytes(xlsTemplatePath, Resources.MyCaseLogTemplate);
+
+            if (!File.Exists(pptxTemplatePath))
+                File.WriteAllBytes(pptxTemplatePath, Resources.PPTemplate2Pic);
+
+            if (string.IsNullOrEmpty(Settings.Default.LogDir))
+            {
+                Settings.Default.LogDir = applicationDirectory + "\\Saved\\";
+                Settings.Default.Save();
+            }
+
+            if (!Directory.Exists(Settings.Default.LogDir))
+                Directory.CreateDirectory(Settings.Default.LogDir);
+
+            cboPIDType.SelectedIndex = 0;
+
+        }
+
+		internal void SnapshotDiscarded()
+		{
+            this.Show();
+        }
+
+		private void CaseLogForm2_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            Settings.Default.UsrSpecialty = (chkKeepSpecialty.Checked) ? cboSpecialty.Text : "";
+            Settings.Default.UsrBodyPart = (chkKeepBodyPart.Checked) ? cboBodyPart.Text : "";
+            Settings.Default.Save();
+
         }
 
         #region screenshot functions
         private void btnAddScreenshot_Click(object sender, EventArgs e)
-		{
-			SelectArea fSA = new SelectArea();
-			fSA.frm = this;
-            fSA.StartPosition = FormStartPosition.Manual;
-            fSA.Location = this.Location;
+		{	
 			fSA.Show();
             this.Hide();
 		}
@@ -45,6 +103,8 @@ namespace MyCaseLog
             ListViewItem newImgItem = new ListViewItem();
             newImgItem.ImageIndex = imageList1.Images.Count - 1;
             listView1.Items.Add(newImgItem);
+
+            fSA.Show();
             //newImgItem.Position = new Point(newImgItem.GetBounds(ItemBoundsPortion.Entire).Width * (listView1.Items.Count - 1), 0);
 
             //listView1.Items.Add("", imageList1.Images.Count - 1);
@@ -81,6 +141,11 @@ namespace MyCaseLog
             deleteInProgress = false;
         }
 
+		internal void ReDoScreenshot()
+		{
+            fSA.Show();
+            this.Hide();
+        }
 
 		private void listView1_MouseDoubleClick(object sender, MouseEventArgs e)
 		{
@@ -100,8 +165,9 @@ namespace MyCaseLog
 		private void btnSave_Click(object sender, EventArgs e)
 		{
             CaseLogEntry logEntry = GetFormEntryData();
-            PowerPointController pptxCtrl = new PowerPointController();
+            PowerPointController pptxCtrl = new PowerPointController(Settings.Default.LogDir, pptxTemplatePath);
             pptxCtrl.AddMyCaseToCollection(logEntry);
+           
             MessageBox.Show("Saved");
         }
 
@@ -114,7 +180,7 @@ namespace MyCaseLog
             e.Specialty = cboSpecialty.Text;
             e.BodyPart = cboBodyPart.Text;
             
-            e.Tags = cboTags.Text.Trim();
+            e.Tags = txtTags.Text.Trim();
             e.Notes = txtNotes.Text.Trim();
             e.PTIdType = cboPIDType.Text;
             e.PTMRN = txtPTID.Text.Trim();
@@ -123,53 +189,15 @@ namespace MyCaseLog
             return e;
         }
 
-		private void CaseLogForm2_FormClosing(object sender, FormClosingEventArgs e)
-		{
-            Settings.Default.UsrSpecialty = (chkKeepSpecialty.Checked) ? cboSpecialty.Text : "";
-            Settings.Default.UsrBodyPart = (chkKeepBodyPart.Checked) ? cboBodyPart.Text : "";
-            Settings.Default.Save();
-
-        }
-
-		private void CaseLogForm2_Load(object sender, EventArgs e)
-		{
-            if (Settings.Default.UsrSpecialty != "")
-            {
-                cboSpecialty.SelectedItem = Settings.Default.UsrSpecialty;
-                chkKeepSpecialty.Checked = true;
-            }
-
-            if (Settings.Default.UsrBodyPart != "")
-            {
-                cboBodyPart.SelectedItem = Settings.Default.UsrBodyPart;
-                chkKeepBodyPart.Checked = true;
-            }
-
-            //ensure ppt template is ready
-            //next to exe.
-            string applicationDirectory = Application.ExecutablePath;
-            string xlsTemplate = applicationDirectory + "\\MyCaseLog.xlsx";
-
-            if (!File.Exists(xlsTemplate))
-                File.WriteAllBytes(xlsTemplate, Resources.MyCaseLogTemplate);
-
-            string pptxTemplate = applicationDirectory + "\\PPTemplate2Pic.pptx";
-            if (!File.Exists(pptxTemplate))
-                File.WriteAllBytes(xlsTemplate, Resources.PPTemplate2Pic);
-
-            if (Settings.Default.LogDir == "")
-            {
-                Settings.Default.LogDir = Application.ExecutablePath + "\\Saved\\";
-                Settings.Default.Save();
-            }
-
-            if (!Directory.Exists(Settings.Default.LogDir))
-                Directory.CreateDirectory(Settings.Default.LogDir);
-        }
 
 		private void button1_Click(object sender, EventArgs e)
 		{
 			System.Diagnostics.Process.Start("explorer.exe", Settings.Default.LogDir);
+        }
+
+		private void btnCaptureScreen_Click(object sender, EventArgs e)
+		{
+            MessageBox.Show("Coming Soon...","No Video Yet", MessageBoxButtons.OK,MessageBoxIcon.Information);
         }
 
 		/* https://code-examples.net/en/q/207b9

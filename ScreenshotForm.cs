@@ -17,6 +17,8 @@ namespace MyCaseLog
             bmp = img;
             pbCapture.Image = bmp;
             imgIndex = index;
+            btnDelete.Text = "Delete";
+            btnRetry.Visible = false;
         }
         public ScreenshotForm(Int32 x, Int32 y, Int32 w, Int32 h, Size s)
         {
@@ -32,6 +34,7 @@ namespace MyCaseLog
             //this.ClientSize = new System.Drawing.Size(rect.Width, rect.Height);
             //this.pbCapture.Size = new System.Drawing.Size(429, 219);
             imgIndex = -1;
+            btnRetry.Visible = true;
         }
 
         private void btnSave_Click(object sender, EventArgs e)
@@ -40,7 +43,7 @@ namespace MyCaseLog
             {
                 frm.AddScreenshotCapturedBMP(bmp);
                 this.Hide();
-                frm.Show();
+               
             }
             else
                 this.Close();
@@ -62,7 +65,21 @@ namespace MyCaseLog
                 this.Close();
             }
             else
+            {
+                frm.SnapshotDiscarded();
                 this.Close();
+            }                
+                
+        }
+
+		private void btnRetry_Click(object sender, EventArgs e)
+		{
+            if (frm != null)
+            {
+                frm.ReDoScreenshot();
+                this.Close();
+            }
+                
         }
 	}
 }

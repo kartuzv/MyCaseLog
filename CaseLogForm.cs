@@ -74,8 +74,8 @@ namespace MyCaseLog
 
 		private void btnPPTEST_Click(object sender, EventArgs e)
 		{
-			var pp = new Controllers.PowerPointController();
-			pp.RunTEST();
+			//var pp = new Controllers.PowerPointController();
+			//pp.RunTEST();
 		}
 	}
 }

@@ -42,7 +42,6 @@ namespace MyCaseLog
 			this.label4 = new System.Windows.Forms.Label();
 			this.txtNotes = new System.Windows.Forms.TextBox();
 			this.label5 = new System.Windows.Forms.Label();
-			this.cboTags = new System.Windows.Forms.ComboBox();
 			this.btnAddScreenshot = new System.Windows.Forms.Button();
 			this.btnCaptureScreen = new System.Windows.Forms.Button();
 			this.listView1 = new System.Windows.Forms.ListView();
@@ -51,6 +50,7 @@ namespace MyCaseLog
 			this.chkXLSX = new System.Windows.Forms.CheckBox();
 			this.btnSave = new System.Windows.Forms.Button();
 			this.button1 = new System.Windows.Forms.Button();
+			this.txtTags = new System.Windows.Forms.TextBox();
 			this.SuspendLayout();
 			// 
 			// label1
@@ -112,6 +112,7 @@ namespace MyCaseLog
             "Vasculature",
             "Female Gyn",
             "Male GU",
+            "Genitourinary",
             "Bones",
             "Other"});
 			this.cboBodyPart.Location = new System.Drawing.Point(99, 53);
@@ -200,37 +201,19 @@ namespace MyCaseLog
 			// 
 			this.label5.AutoSize = true;
 			this.label5.ForeColor = System.Drawing.Color.White;
-			this.label5.Location = new System.Drawing.Point(11, 255);
+			this.label5.Location = new System.Drawing.Point(12, 250);
 			this.label5.Name = "label5";
 			this.label5.Size = new System.Drawing.Size(34, 15);
 			this.label5.TabIndex = 11;
 			this.label5.Text = "Tags:";
 			// 
-			// cboTags
-			// 
-			this.cboTags.AutoCompleteCustomSource.AddRange(new string[] {
-            "Teaching",
-            "Rare",
-            "followup",
-            "spleen"});
-			this.cboTags.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.SuggestAppend;
-			this.cboTags.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.CustomSource;
-			this.cboTags.BackColor = System.Drawing.Color.Black;
-			this.cboTags.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-			this.cboTags.ForeColor = System.Drawing.Color.White;
-			this.cboTags.FormattingEnabled = true;
-			this.cboTags.Location = new System.Drawing.Point(51, 252);
-			this.cboTags.Name = "cboTags";
-			this.cboTags.Size = new System.Drawing.Size(429, 23);
-			this.cboTags.TabIndex = 12;
-			// 
 			// btnAddScreenshot
 			// 
 			this.btnAddScreenshot.BackColor = System.Drawing.Color.Black;
 			this.btnAddScreenshot.ForeColor = System.Drawing.Color.White;
-			this.btnAddScreenshot.Location = new System.Drawing.Point(51, 281);
+			this.btnAddScreenshot.Location = new System.Drawing.Point(156, 281);
 			this.btnAddScreenshot.Name = "btnAddScreenshot";
-			this.btnAddScreenshot.Size = new System.Drawing.Size(105, 38);
+			this.btnAddScreenshot.Size = new System.Drawing.Size(175, 38);
 			this.btnAddScreenshot.TabIndex = 13;
 			this.btnAddScreenshot.TabStop = false;
 			this.btnAddScreenshot.Text = "Add Screenshot";
@@ -245,8 +228,9 @@ namespace MyCaseLog
 			this.btnCaptureScreen.Name = "btnCaptureScreen";
 			this.btnCaptureScreen.Size = new System.Drawing.Size(105, 38);
 			this.btnCaptureScreen.TabIndex = 14;
-			this.btnCaptureScreen.Text = "Capture Screen";
+			this.btnCaptureScreen.Text = "Capture Video";
 			this.btnCaptureScreen.UseVisualStyleBackColor = false;
+			this.btnCaptureScreen.Click += new System.EventHandler(this.btnCaptureScreen_Click);
 			// 
 			// listView1
 			// 
@@ -318,12 +302,22 @@ namespace MyCaseLog
 			this.button1.UseVisualStyleBackColor = false;
 			this.button1.Click += new System.EventHandler(this.button1_Click);
 			// 
+			// txtTags
+			// 
+			this.txtTags.BackColor = System.Drawing.Color.Black;
+			this.txtTags.ForeColor = System.Drawing.Color.White;
+			this.txtTags.Location = new System.Drawing.Point(51, 247);
+			this.txtTags.Name = "txtTags";
+			this.txtTags.Size = new System.Drawing.Size(429, 23);
+			this.txtTags.TabIndex = 20;
+			// 
 			// CaseLogForm2
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.BackColor = System.Drawing.Color.Black;
 			this.ClientSize = new System.Drawing.Size(499, 495);
+			this.Controls.Add(this.txtTags);
 			this.Controls.Add(this.button1);
 			this.Controls.Add(this.btnSave);
 			this.Controls.Add(this.chkXLSX);
@@ -331,7 +325,6 @@ namespace MyCaseLog
 			this.Controls.Add(this.listView1);
 			this.Controls.Add(this.btnCaptureScreen);
 			this.Controls.Add(this.btnAddScreenshot);
-			this.Controls.Add(this.cboTags);
 			this.Controls.Add(this.label5);
 			this.Controls.Add(this.txtNotes);
 			this.Controls.Add(this.label4);
@@ -345,10 +338,11 @@ namespace MyCaseLog
 			this.Controls.Add(this.label2);
 			this.Controls.Add(this.label1);
 			this.ForeColor = System.Drawing.SystemColors.Control;
-			this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
+			this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.Fixed3D;
+			this.MaximizeBox = false;
 			this.Name = "CaseLogForm2";
 			this.StartPosition = System.Windows.Forms.FormStartPosition.Manual;
-			this.Text = "CaseLogForm2";
+			this.Text = "MyCaseLog";
 			this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.CaseLogForm2_FormClosing);
 			this.Load += new System.EventHandler(this.CaseLogForm2_Load);
 			this.ResumeLayout(false);
@@ -370,7 +364,6 @@ namespace MyCaseLog
 		private System.Windows.Forms.Label label4;
 		private System.Windows.Forms.TextBox txtNotes;
 		private System.Windows.Forms.Label label5;
-		private System.Windows.Forms.ComboBox cboTags;
 		private System.Windows.Forms.Button btnAddScreenshot;
 		private System.Windows.Forms.Button btnCaptureScreen;
 		private System.Windows.Forms.ListView listView1;
@@ -379,5 +372,6 @@ namespace MyCaseLog
 		private System.Windows.Forms.CheckBox chkXLSX;
 		private System.Windows.Forms.Button btnSave;
 		private System.Windows.Forms.Button button1;
+		private System.Windows.Forms.TextBox txtTags;
 	}
 }
