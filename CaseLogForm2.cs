@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
+using System.Linq;
 using System.Windows.Forms;
 
 namespace MyCaseLog
@@ -16,6 +17,8 @@ namespace MyCaseLog
         string xlsTemplatePath = "";
         string pptxTemplatePath = "";
         SelectArea fSA;
+        string[] _specialtyList;
+        string[] _bodypartList;
         public CaseLogForm2()
 		{
 			InitializeComponent();
@@ -31,10 +34,32 @@ namespace MyCaseLog
 
         private void CaseLogForm2_Load(object sender, EventArgs e)
         {
+            //load user configurable specialty
+            _specialtyList = Settings.Default.SpecialityList.Split('|', StringSplitOptions.RemoveEmptyEntries);
+           
+            if (_specialtyList.Length > 0)
+            {
+                Array.Sort(_specialtyList, StringComparer.InvariantCulture);
+
+                cboSpecialty.Items.Clear();
+                cboSpecialty.Items.AddRange(_specialtyList);
+
+            }
+
+            //load user configuarable bodypart
+            string[] _bodypartList = Settings.Default.BodyPartList.Split('|', StringSplitOptions.RemoveEmptyEntries);
+            if (_bodypartList.Length > 0)
+            {
+                Array.Sort(_bodypartList, StringComparer.InvariantCulture);
+                cboBodyPart.Items.Clear();
+                cboBodyPart.Items.AddRange(_bodypartList);
+            }
+
+
             if (Settings.Default.UsrSpecialty != "")
             {
                 cboSpecialty.SelectedItem = Settings.Default.UsrSpecialty;
-                chkKeepSpecialty.Checked = true;
+                //chkKeepSpecialty.Checked = true;
             }
 
             if (Settings.Default.UsrBodyPart != "")
@@ -79,7 +104,7 @@ namespace MyCaseLog
 
 		private void CaseLogForm2_FormClosing(object sender, FormClosingEventArgs e)
         {
-            Settings.Default.UsrSpecialty = (chkKeepSpecialty.Checked) ? cboSpecialty.Text : "";
+            Settings.Default.UsrSpecialty = cboSpecialty.Text;
             Settings.Default.UsrBodyPart = (chkKeepBodyPart.Checked) ? cboBodyPart.Text : "";
             Settings.Default.Save();
 
@@ -169,6 +194,12 @@ namespace MyCaseLog
             pptxCtrl.AddMyCaseToCollection(logEntry);
            
             MessageBox.Show("Saved");
+            txtNotes.Text = "";
+            txtPTID.Text = "";
+            txtTags.Text = "";
+
+            imageList1.Images.Clear();
+            snaps.Clear();
         }
 
         private CaseLogEntry GetFormEntryData()
@@ -199,6 +230,40 @@ namespace MyCaseLog
 		{
             MessageBox.Show("Coming Soon...","No Video Yet", MessageBoxButtons.OK,MessageBoxIcon.Information);
         }
+
+		private void btnEditListSpeciality_Click(object sender, EventArgs e)
+		{            
+            FrmListEditor frmEditr = new FrmListEditor(_specialtyList, "Specialty");
+            if (frmEditr.ShowDialog() == DialogResult.OK)
+            {
+                _specialtyList = frmEditr.ItemList.ToArray();
+                cboSpecialty.Items.Clear();
+                cboSpecialty.Items.AddRange(_specialtyList);
+            }
+            frmEditr.Close();
+            frmEditr.Dispose();
+           
+		}
+
+		private void AddPresetTag_Click(object sender, EventArgs e)
+		{
+            txtTags.Text = txtTags.Text + " " + ((Button)sender).Text;
+		}
+
+		private void btnViewSpecialtyCases_Click(object sender, EventArgs e)
+		{
+            int newWidth = this.Width == 1000 ? 515 : 1000;
+            string btnOpenerIcon = newWidth == 1000 ? "t" : "u";
+            btnViewSpecialtyCases.Text = btnOpenerIcon;
+
+            this.Width = newWidth;
+
+            if (this.Width == 1000)
+            {
+                PowerPointController p = new PowerPointController(Settings.Default.LogDir, pptxTemplatePath);
+                List<string> pptTitles= p.GetAllCaseTitles(cboSpecialty.Text);
+            }
+		}
 
 		/* https://code-examples.net/en/q/207b9
          // AutoCompleteStringCollection   

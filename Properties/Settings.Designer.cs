@@ -34,20 +34,17 @@ namespace MyCaseLog.Properties {
             }
         }
         
-        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         public string Locations {
             get {
                 return ((string)(this["Locations"]));
             }
-            set {
-                this["Locations"] = value;
-            }
         }
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        [global::System.Configuration.DefaultSettingValueAttribute("Abdominal")]
         public string UsrSpecialty {
             get {
                 return ((string)(this["UsrSpecialty"]));
@@ -59,13 +56,38 @@ namespace MyCaseLog.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        [global::System.Configuration.DefaultSettingValueAttribute("Body")]
         public string UsrBodyPart {
             get {
                 return ((string)(this["UsrBodyPart"]));
             }
             set {
                 this["UsrBodyPart"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("Abdominal|Chest|Body|Nuclear|Mammo|Neuro|Pediatrics|MSK")]
+        public string SpecialityList {
+            get {
+                return ((string)(this["SpecialityList"]));
+            }
+            set {
+                this["SpecialityList"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("Liver|GB/Biliary|Pancreas|Kidneys/Ureters/Bladder|Adrenals|Lymph nodes|Bowel|Vasc" +
+            "ulature|Female Gyn|Male GU|Genitourinary|Bones|Other")]
+        public string BodyPartList {
+            get {
+                return ((string)(this["BodyPartList"]));
+            }
+            set {
+                this["BodyPartList"] = value;
             }
         }
     }

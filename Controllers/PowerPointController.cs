@@ -26,8 +26,8 @@ namespace MyCaseLog.Controllers
         private PresentationDocument document;
         string pathToPPTemplate = "";//Settings.Default.LogDir + $"PPTemplate2Pic.pptx";
         string logPath = "";
-        SlidePart blankTemplateSlidePart = null;
-        private PresentationDocument _templateDoc;
+        //SlidePart blankTemplateSlidePart = null;
+        //private PresentationDocument _templateDoc;
 
         public PowerPointController(string pathToLogFolder, string pptTemplatePath)
         {
@@ -36,253 +36,7 @@ namespace MyCaseLog.Controllers
             logPath = pathToLogFolder;
 
         }
-        public void InitPPPackageForCollection(string filePath)
-        {
-            using (document = PresentationDocument.Open(filePath, true))
-            {
-                int slideCount = CountSlides();
-                if (slideCount == 1)
-                {
-                    ChangeParts();
-                }
-                else
-                {
-                    //need to import another slide
-                }
-
-            }
-        }
-
-        private void ChangeParts()
-        {
-            //Stores the referrences to all the parts in a dictionary.
-            BuildUriPartDictionary();
-            //Adds new parts or new relationships.
-            AddParts();
-            //Changes the contents of the specified parts.
-
-            ChangeThumbnailPart1(((ThumbnailPart)UriPartDictionary["/docProps/thumbnail.jpeg"]));
-
-            ChangeSlidePart1(((SlidePart)UriPartDictionary["/ppt/slides/slide1.xml"]));
-            ChangeNotesSlidePart1(((NotesSlidePart)UriPartDictionary["/ppt/notesSlides/notesSlide1.xml"]));
-
-            ChangeCoreFilePropertiesPart1(((CoreFilePropertiesPart)UriPartDictionary["/docProps/core.xml"]));
-            ChangeExtendedFilePropertiesPart1(((ExtendedFilePropertiesPart)UriPartDictionary["/docProps/app.xml"]));
-        }
-
-        /// <summary>
-        /// Stores the references to all the parts in the package.
-        /// They could be retrieved by their URIs later.
-        /// </summary>
-        private void BuildUriPartDictionary()
-        {
-            System.Collections.Generic.Queue<OpenXmlPartContainer> queue = new System.Collections.Generic.Queue<OpenXmlPartContainer>();
-            queue.Enqueue(document);
-            while (queue.Count > 0)
-            {
-                foreach (var part in queue.Dequeue().Parts)
-                {
-                    if (!UriPartDictionary.Keys.Contains(part.OpenXmlPart.Uri.ToString()))
-                    {
-                        UriPartDictionary.Add(part.OpenXmlPart.Uri.ToString(), part.OpenXmlPart);
-                        queue.Enqueue(part.OpenXmlPart);
-                    }
-                }
-            }
-        }
-
-        /// <summary>
-        /// Adds new parts or new relationship between parts.
-        /// </summary>
-        private void AddParts()
-        {
-            //Generate new parts.
-            ImagePart imagePart1 = UriPartDictionary["/ppt/slides/slide1.xml"].AddNewPart<ImagePart>("image/jpeg", "rId3");
-            GenerateImagePart1Content(imagePart1);
-
-        }
-
-        private void GenerateImagePart1Content(ImagePart imagePart1)
-        {
-            //System.IO.Stream data = GetBinaryDataStream(imagePart1Data);
-            //imagePart1.FeedData(data);
-            //data.Close();
-        }
-
-        private void ChangeCoreFilePropertiesPart1(CoreFilePropertiesPart coreFilePropertiesPart1)
-        {
-            var package = coreFilePropertiesPart1.OpenXmlPackage;
-            package.PackageProperties.Modified = System.Xml.XmlConvert.ToDateTime(DateTime.Now.ToString(), System.Xml.XmlDateTimeSerializationMode.Local);
-        }
-
-        private void ChangeThumbnailPart1(ThumbnailPart thumbnailPart1)
-        {
-            //System.IO.Stream data = GetBinaryDataStream(thumbnailPart1Data);
-            //thumbnailPart1.FeedData(data);
-            //data.Close();
-        }
-
-        private void ChangeExtendedFilePropertiesPart1(ExtendedFilePropertiesPart extendedFilePropertiesPart1)
-        {
-            Ap.Properties properties1 = extendedFilePropertiesPart1.Properties;
-
-            Ap.TotalTime totalTime1 = properties1.GetFirstChild<Ap.TotalTime>();
-            Ap.Words words1 = properties1.GetFirstChild<Ap.Words>();
-            Ap.Paragraphs paragraphs1 = properties1.GetFirstChild<Ap.Paragraphs>();
-            Ap.TitlesOfParts titlesOfParts1 = properties1.GetFirstChild<Ap.TitlesOfParts>();
-            totalTime1.Text = "10";
-
-            words1.Text = "3";
-
-            paragraphs1.Text = "3";
-
-
-            Vt.VTVector vTVector1 = titlesOfParts1.GetFirstChild<Vt.VTVector>();
-
-            Vt.VTLPSTR vTLPSTR1 = vTVector1.Elements<Vt.VTLPSTR>().ElementAt(4);
-            vTLPSTR1.Text = "Title-goes-here";
-
-        }
-
-        private void ChangeSlidePart1(SlidePart slidePart1)
-        {
-            Slide slide1 = slidePart1.Slide;
-
-            CommonSlideData commonSlideData1 = slide1.GetFirstChild<CommonSlideData>();
-
-            ShapeTree shapeTree1 = commonSlideData1.GetFirstChild<ShapeTree>();
-
-            Shape shape1 = shapeTree1.GetFirstChild<Shape>();
-            Shape shape2 = shapeTree1.Elements<Shape>().ElementAt(1);
-            Shape shape3 = shapeTree1.Elements<Shape>().ElementAt(2);
-
-            TextBody textBody1 = shape1.GetFirstChild<TextBody>();
-
-            A.Paragraph paragraph1 = textBody1.GetFirstChild<A.Paragraph>();
-
-            A.EndParagraphRunProperties endParagraphRunProperties1 = paragraph1.GetFirstChild<A.EndParagraphRunProperties>();
-
-            A.Run run1 = new A.Run();
-
-            A.RunProperties runProperties1 = new A.RunProperties() { Language = "en-US", FontSize = 2000, Dirty = false };
-            runProperties1.SetAttribute(new OpenXmlAttribute("", "smtClean", "", "0"));
-            A.Text text1 = new A.Text();
-            text1.Text = "Title-goes-here";
-
-            run1.Append(runProperties1);
-            run1.Append(text1);
-            paragraph1.InsertBefore(run1, endParagraphRunProperties1);
-
-            Picture picture1 = new Picture();
-
-            NonVisualPictureProperties nonVisualPictureProperties1 = new NonVisualPictureProperties();
-            NonVisualDrawingProperties nonVisualDrawingProperties1 = new NonVisualDrawingProperties() { Id = (UInt32Value)2U, Name = "Content Placeholder 1" };
-
-            NonVisualPictureDrawingProperties nonVisualPictureDrawingProperties1 = new NonVisualPictureDrawingProperties();
-            A.PictureLocks pictureLocks1 = new A.PictureLocks() { NoGrouping = true, NoChangeAspect = true };
-
-            nonVisualPictureDrawingProperties1.Append(pictureLocks1);
-
-            ApplicationNonVisualDrawingProperties applicationNonVisualDrawingProperties1 = new ApplicationNonVisualDrawingProperties();
-            PlaceholderShape placeholderShape1 = new PlaceholderShape() { Size = PlaceholderSizeValues.Half, Index = (UInt32Value)1U };
-
-            applicationNonVisualDrawingProperties1.Append(placeholderShape1);
-
-            nonVisualPictureProperties1.Append(nonVisualDrawingProperties1);
-            nonVisualPictureProperties1.Append(nonVisualPictureDrawingProperties1);
-            nonVisualPictureProperties1.Append(applicationNonVisualDrawingProperties1);
-
-            BlipFill blipFill1 = new BlipFill();
-
-            A.Blip blip1 = new A.Blip() { Embed = "rId3" };
-
-            A.BlipExtensionList blipExtensionList1 = new A.BlipExtensionList();
-
-            A.BlipExtension blipExtension1 = new A.BlipExtension() { Uri = "{28A0092B-C50C-407E-A947-70E740481C1C}" };
-
-            A14.UseLocalDpi useLocalDpi1 = new A14.UseLocalDpi() { Val = false };
-            useLocalDpi1.AddNamespaceDeclaration("a14", "http://schemas.microsoft.com/office/drawing/2010/main");
-
-            blipExtension1.Append(useLocalDpi1);
-
-            blipExtensionList1.Append(blipExtension1);
-
-            blip1.Append(blipExtensionList1);
-
-            A.Stretch stretch1 = new A.Stretch();
-            A.FillRectangle fillRectangle1 = new A.FillRectangle();
-
-            stretch1.Append(fillRectangle1);
-
-            blipFill1.Append(blip1);
-            blipFill1.Append(stretch1);
-
-            ShapeProperties shapeProperties1 = new ShapeProperties();
-
-            A.Transform2D transform2D1 = new A.Transform2D();
-            A.Offset offset1 = new A.Offset() { X = 788468L, Y = 438150L };
-            A.Extents extents1 = new A.Extents() { Cx = 4319039L, Cy = 6183313L };
-
-            transform2D1.Append(offset1);
-            transform2D1.Append(extents1);
-
-            shapeProperties1.Append(transform2D1);
-
-            picture1.Append(nonVisualPictureProperties1);
-            picture1.Append(blipFill1);
-            picture1.Append(shapeProperties1);
-            shapeTree1.InsertBefore(picture1, shape2);
-
-            NonVisualShapeProperties nonVisualShapeProperties1 = shape2.GetFirstChild<NonVisualShapeProperties>();
-            ShapeProperties shapeProperties2 = shape2.GetFirstChild<ShapeProperties>();
-
-            NonVisualDrawingProperties nonVisualDrawingProperties2 = nonVisualShapeProperties1.GetFirstChild<NonVisualDrawingProperties>();
-            ApplicationNonVisualDrawingProperties applicationNonVisualDrawingProperties2 = nonVisualShapeProperties1.GetFirstChild<ApplicationNonVisualDrawingProperties>();
-            nonVisualDrawingProperties2.Id = (UInt32Value)9U;
-            nonVisualDrawingProperties2.Name = "Content Placeholder 8";
-
-            PlaceholderShape placeholderShape2 = applicationNonVisualDrawingProperties2.GetFirstChild<PlaceholderShape>();
-            placeholderShape2.Index = (UInt32Value)2U;
-
-            A.Transform2D transform2D2 = shapeProperties2.GetFirstChild<A.Transform2D>();
-
-            A.Offset offset2 = transform2D2.GetFirstChild<A.Offset>();
-            A.Extents extents2 = transform2D2.GetFirstChild<A.Extents>();
-            offset2.X = 5838825L;
-            extents2.Cx = 6210299L;
-
-            shape3.Remove();
-        }
-
-        private void ChangeNotesSlidePart1(NotesSlidePart notesSlidePart1)
-        {
-            NotesSlide notesSlide1 = notesSlidePart1.NotesSlide;
-
-            CommonSlideData commonSlideData1 = notesSlide1.GetFirstChild<CommonSlideData>();
-
-            ShapeTree shapeTree1 = commonSlideData1.GetFirstChild<ShapeTree>();
-
-            Shape shape1 = shapeTree1.Elements<Shape>().ElementAt(1);
-
-            TextBody textBody1 = shape1.GetFirstChild<TextBody>();
-
-            A.Paragraph paragraph1 = textBody1.GetFirstChild<A.Paragraph>();
-
-            A.EndParagraphRunProperties endParagraphRunProperties1 = paragraph1.GetFirstChild<A.EndParagraphRunProperties>();
-
-            A.Run run1 = new A.Run();
-
-            A.RunProperties runProperties1 = new A.RunProperties() { Language = "en-US" };
-            runProperties1.SetAttribute(new OpenXmlAttribute("", "smtClean", "", "0"));
-            A.Text text1 = new A.Text();
-            text1.Text = "Note-goes-here";
-
-            run1.Append(runProperties1);
-            run1.Append(text1);
-            paragraph1.InsertBefore(run1, endParagraphRunProperties1);
-        }
-
-
+      
         //  InsertNewSlide(@"..\..\Documents\Myppt2.pptx", 1, "My new slide");
 
         // Insert a slide into the specified presentation.
@@ -428,7 +182,7 @@ namespace MyCaseLog.Controllers
         {
             string pathToPPSlides = EnsurePPSlideCollectionExists(e.Specialty);
 
-            LoadTemplateSlidePart();//load template into memory
+            //LoadTemplateSlidePart();//load template into memory
 
             using (document = PresentationDocument.Open(pathToPPSlides, true))
             {
@@ -456,7 +210,7 @@ namespace MyCaseLog.Controllers
 
             }
 
-            _templateDoc.Dispose();
+            //_templateDoc.Dispose();
         }
 
         private void AddCaseSlideToPresentation(PresentationPart p, SlidePart templateSlide, CaseLogEntry e, int caseSlideNbr=1,int caseSlidesTotal=1, SlidePart targetSlide=null)
@@ -475,7 +229,7 @@ namespace MyCaseLog.Controllers
             }
             
             string slideTitle = $"[{caseSlideNbr}/{caseSlidesTotal}] {e.Specialty}|{e.BodyPart}|{e.PTIdType}:{e.PTMRN}|{DateTime.Now}";
-            string slideNotes = $"{e.Notes}{Environment.NewLine}{e.Tags}";
+            string slideNotes = $"{e.Notes}{Environment.NewLine}[TAGS]: {e.Tags}";
             
             SetSlideTitle(targetSlide, slideTitle);
 
@@ -516,19 +270,19 @@ namespace MyCaseLog.Controllers
 
         }
 
-        private SlidePart AddNewSlideFromTemplate(PresentationPart p)
-        {
-            SlidePart newSlidePartClode = p.AddNewPart<SlidePart>();
+        //private SlidePart AddNewSlideFromTemplate(PresentationPart p)
+        //{
+        //    SlidePart newSlidePartClode = p.AddNewPart<SlidePart>();
 
-            Slide clonedSlideContentFromTemplate = (Slide)blankTemplateSlidePart.Slide.CloneNode(true);
-            clonedSlideContentFromTemplate.Save(newSlidePartClode);
-            newSlidePartClode.AddPart(blankTemplateSlidePart.SlideLayoutPart);
+        //    Slide clonedSlideContentFromTemplate = (Slide)blankTemplateSlidePart.Slide.CloneNode(true);
+        //    clonedSlideContentFromTemplate.Save(newSlidePartClode);
+        //    newSlidePartClode.AddPart(blankTemplateSlidePart.SlideLayoutPart);
 
-            p.AppendSlide(newSlidePartClode);
-            p.Presentation.Save();
+        //    p.AppendSlide(newSlidePartClode);
+        //    p.Presentation.Save();
 
-            return newSlidePartClode;
-        }
+        //    return newSlidePartClode;
+        //}
 
         private string EnsurePPSlideCollectionExists(string specialty)
         {
@@ -548,13 +302,13 @@ namespace MyCaseLog.Controllers
             return pathToSlideCollection;
         }
 
-        private void LoadTemplateSlidePart()
-        {
-            _templateDoc = PresentationDocument.Open(pathToPPTemplate, false);
+        //private void LoadTemplateSlidePart()
+        //{
+        //    _templateDoc = PresentationDocument.Open(pathToPPTemplate, false);
 
-            blankTemplateSlidePart = _templateDoc.PresentationPart.GetSlidePartsInOrder().First();
+        //    blankTemplateSlidePart = _templateDoc.PresentationPart.GetSlidePartsInOrder().First();
 
-        }
+        //}
 
         public string RunTEST()
         {
@@ -1230,6 +984,36 @@ namespace MyCaseLog.Controllers
 
             return paragraphText.ToString().Trim();
         }
+
+        public List<string> GetAllCaseTitles(string specialty, bool removeSpecialtyFromTitle=true)
+        {
+            List<string> titles = new List<string>();
+
+            string pathToSlideCollection = logPath + $"MCL_{specialty}.pptx";
+            if (!File.Exists(pathToSlideCollection))
+                return titles;
+
+            using (document = PresentationDocument.Open(pathToSlideCollection, false))
+            {
+                var lstSlideParts = document.PresentationPart.GetSlidePartsInOrder();
+                             
+                foreach (SlidePart sp in lstSlideParts)
+                {
+                    string slideTitle = GetSlideTitle(sp);
+                    if (slideTitle.StartsWith("[1/"))
+                    { 
+                        if (removeSpecialtyFromTitle)
+                            titles.Add(slideTitle.Substring(slideTitle.IndexOf("|") + 1));
+                        else
+                            titles.Add(slideTitle.Substring(slideTitle.IndexOf("]") + 2));
+                    }
+                        
+                } 
+            }
+
+            return titles;
+        }
+
 
         // Determines whether the shape is a title shape.
         private static bool IsTitleShape(Shape shape)

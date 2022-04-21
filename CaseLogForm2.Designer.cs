@@ -30,6 +30,7 @@ namespace MyCaseLog
 		private void InitializeComponent()
 		{
 			this.components = new System.ComponentModel.Container();
+			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(CaseLogForm2));
 			this.label1 = new System.Windows.Forms.Label();
 			this.label2 = new System.Windows.Forms.Label();
 			this.cboSpecialty = new System.Windows.Forms.ComboBox();
@@ -37,7 +38,6 @@ namespace MyCaseLog
 			this.label3 = new System.Windows.Forms.Label();
 			this.cboPIDType = new System.Windows.Forms.ComboBox();
 			this.txtPTID = new System.Windows.Forms.TextBox();
-			this.chkKeepSpecialty = new System.Windows.Forms.CheckBox();
 			this.chkKeepBodyPart = new System.Windows.Forms.CheckBox();
 			this.label4 = new System.Windows.Forms.Label();
 			this.txtNotes = new System.Windows.Forms.TextBox();
@@ -51,6 +51,11 @@ namespace MyCaseLog
 			this.btnSave = new System.Windows.Forms.Button();
 			this.button1 = new System.Windows.Forms.Button();
 			this.txtTags = new System.Windows.Forms.TextBox();
+			this.btnEditListSpeciality = new System.Windows.Forms.Button();
+			this.btnViewSpecialtyCases = new System.Windows.Forms.Button();
+			this.button3 = new System.Windows.Forms.Button();
+			this.button4 = new System.Windows.Forms.Button();
+			this.button5 = new System.Windows.Forms.Button();
 			this.SuspendLayout();
 			// 
 			// label1
@@ -89,7 +94,7 @@ namespace MyCaseLog
             "Neuro",
             "Pediatrics",
             "MSK"});
-			this.cboSpecialty.Location = new System.Drawing.Point(99, 12);
+			this.cboSpecialty.Location = new System.Drawing.Point(118, 13);
 			this.cboSpecialty.Name = "cboSpecialty";
 			this.cboSpecialty.Size = new System.Drawing.Size(299, 23);
 			this.cboSpecialty.TabIndex = 2;
@@ -115,7 +120,7 @@ namespace MyCaseLog
             "Genitourinary",
             "Bones",
             "Other"});
-			this.cboBodyPart.Location = new System.Drawing.Point(99, 53);
+			this.cboBodyPart.Location = new System.Drawing.Point(118, 53);
 			this.cboBodyPart.Name = "cboBodyPart";
 			this.cboBodyPart.Size = new System.Drawing.Size(299, 23);
 			this.cboBodyPart.TabIndex = 3;
@@ -154,22 +159,11 @@ namespace MyCaseLog
 			this.txtPTID.Size = new System.Drawing.Size(155, 23);
 			this.txtPTID.TabIndex = 6;
 			// 
-			// chkKeepSpecialty
-			// 
-			this.chkKeepSpecialty.AutoSize = true;
-			this.chkKeepSpecialty.ForeColor = System.Drawing.Color.White;
-			this.chkKeepSpecialty.Location = new System.Drawing.Point(416, 15);
-			this.chkKeepSpecialty.Name = "chkKeepSpecialty";
-			this.chkKeepSpecialty.Size = new System.Drawing.Size(52, 19);
-			this.chkKeepSpecialty.TabIndex = 7;
-			this.chkKeepSpecialty.Text = "Keep";
-			this.chkKeepSpecialty.UseVisualStyleBackColor = true;
-			// 
 			// chkKeepBodyPart
 			// 
 			this.chkKeepBodyPart.AutoSize = true;
 			this.chkKeepBodyPart.ForeColor = System.Drawing.Color.White;
-			this.chkKeepBodyPart.Location = new System.Drawing.Point(416, 57);
+			this.chkKeepBodyPart.Location = new System.Drawing.Point(428, 57);
 			this.chkKeepBodyPart.Name = "chkKeepBodyPart";
 			this.chkKeepBodyPart.Size = new System.Drawing.Size(52, 19);
 			this.chkKeepBodyPart.TabIndex = 8;
@@ -211,7 +205,7 @@ namespace MyCaseLog
 			// 
 			this.btnAddScreenshot.BackColor = System.Drawing.Color.Black;
 			this.btnAddScreenshot.ForeColor = System.Drawing.Color.White;
-			this.btnAddScreenshot.Location = new System.Drawing.Point(156, 281);
+			this.btnAddScreenshot.Location = new System.Drawing.Point(157, 320);
 			this.btnAddScreenshot.Name = "btnAddScreenshot";
 			this.btnAddScreenshot.Size = new System.Drawing.Size(175, 38);
 			this.btnAddScreenshot.TabIndex = 13;
@@ -224,11 +218,11 @@ namespace MyCaseLog
 			// 
 			this.btnCaptureScreen.BackColor = System.Drawing.Color.Black;
 			this.btnCaptureScreen.ForeColor = System.Drawing.Color.White;
-			this.btnCaptureScreen.Location = new System.Drawing.Point(375, 281);
+			this.btnCaptureScreen.Location = new System.Drawing.Point(417, 333);
 			this.btnCaptureScreen.Name = "btnCaptureScreen";
-			this.btnCaptureScreen.Size = new System.Drawing.Size(105, 38);
+			this.btnCaptureScreen.Size = new System.Drawing.Size(64, 25);
 			this.btnCaptureScreen.TabIndex = 14;
-			this.btnCaptureScreen.Text = "Capture Video";
+			this.btnCaptureScreen.Text = "+Video";
 			this.btnCaptureScreen.UseVisualStyleBackColor = false;
 			this.btnCaptureScreen.Click += new System.EventHandler(this.btnCaptureScreen_Click);
 			// 
@@ -240,7 +234,7 @@ namespace MyCaseLog
 			this.listView1.HeaderStyle = System.Windows.Forms.ColumnHeaderStyle.None;
 			this.listView1.HideSelection = false;
 			this.listView1.LargeImageList = this.imageList1;
-			this.listView1.Location = new System.Drawing.Point(12, 325);
+			this.listView1.Location = new System.Drawing.Point(13, 364);
 			this.listView1.MultiSelect = false;
 			this.listView1.Name = "listView1";
 			this.listView1.Size = new System.Drawing.Size(468, 109);
@@ -260,7 +254,7 @@ namespace MyCaseLog
 			this.chkPPTX.Checked = true;
 			this.chkPPTX.CheckState = System.Windows.Forms.CheckState.Checked;
 			this.chkPPTX.ForeColor = System.Drawing.Color.White;
-			this.chkPPTX.Location = new System.Drawing.Point(11, 440);
+			this.chkPPTX.Location = new System.Drawing.Point(12, 479);
 			this.chkPPTX.Name = "chkPPTX";
 			this.chkPPTX.Size = new System.Drawing.Size(54, 19);
 			this.chkPPTX.TabIndex = 16;
@@ -271,18 +265,19 @@ namespace MyCaseLog
 			// 
 			this.chkXLSX.AutoSize = true;
 			this.chkXLSX.ForeColor = System.Drawing.Color.White;
-			this.chkXLSX.Location = new System.Drawing.Point(11, 466);
+			this.chkXLSX.Location = new System.Drawing.Point(12, 505);
 			this.chkXLSX.Name = "chkXLSX";
 			this.chkXLSX.Size = new System.Drawing.Size(52, 19);
 			this.chkXLSX.TabIndex = 17;
 			this.chkXLSX.Text = "XLSX";
 			this.chkXLSX.UseVisualStyleBackColor = true;
+			this.chkXLSX.Visible = false;
 			// 
 			// btnSave
 			// 
 			this.btnSave.BackColor = System.Drawing.Color.Black;
 			this.btnSave.ForeColor = System.Drawing.Color.White;
-			this.btnSave.Location = new System.Drawing.Point(309, 440);
+			this.btnSave.Location = new System.Drawing.Point(310, 479);
 			this.btnSave.Name = "btnSave";
 			this.btnSave.Size = new System.Drawing.Size(171, 45);
 			this.btnSave.TabIndex = 18;
@@ -294,9 +289,9 @@ namespace MyCaseLog
 			// 
 			this.button1.BackColor = System.Drawing.Color.Black;
 			this.button1.ForeColor = System.Drawing.Color.White;
-			this.button1.Location = new System.Drawing.Point(71, 440);
+			this.button1.Location = new System.Drawing.Point(72, 479);
 			this.button1.Name = "button1";
-			this.button1.Size = new System.Drawing.Size(53, 43);
+			this.button1.Size = new System.Drawing.Size(65, 43);
 			this.button1.TabIndex = 19;
 			this.button1.Text = "View";
 			this.button1.UseVisualStyleBackColor = false;
@@ -305,18 +300,95 @@ namespace MyCaseLog
 			// txtTags
 			// 
 			this.txtTags.BackColor = System.Drawing.Color.Black;
+			this.txtTags.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
 			this.txtTags.ForeColor = System.Drawing.Color.White;
 			this.txtTags.Location = new System.Drawing.Point(51, 247);
 			this.txtTags.Name = "txtTags";
-			this.txtTags.Size = new System.Drawing.Size(429, 23);
+			this.txtTags.Size = new System.Drawing.Size(429, 25);
 			this.txtTags.TabIndex = 20;
+			// 
+			// btnEditListSpeciality
+			// 
+			this.btnEditListSpeciality.BackColor = System.Drawing.Color.Black;
+			this.btnEditListSpeciality.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+			this.btnEditListSpeciality.Font = new System.Drawing.Font("Arial Narrow", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
+			this.btnEditListSpeciality.ForeColor = System.Drawing.Color.White;
+			this.btnEditListSpeciality.Image = ((System.Drawing.Image)(resources.GetObject("btnEditListSpeciality.Image")));
+			this.btnEditListSpeciality.Location = new System.Drawing.Point(92, 13);
+			this.btnEditListSpeciality.Name = "btnEditListSpeciality";
+			this.btnEditListSpeciality.Size = new System.Drawing.Size(22, 22);
+			this.btnEditListSpeciality.TabIndex = 21;
+			this.btnEditListSpeciality.TabStop = false;
+			this.btnEditListSpeciality.TextAlign = System.Drawing.ContentAlignment.TopCenter;
+			this.btnEditListSpeciality.UseVisualStyleBackColor = false;
+			this.btnEditListSpeciality.Click += new System.EventHandler(this.btnEditListSpeciality_Click);
+			// 
+			// btnViewSpecialtyCases
+			// 
+			this.btnViewSpecialtyCases.BackColor = System.Drawing.Color.Black;
+			this.btnViewSpecialtyCases.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+			this.btnViewSpecialtyCases.Font = new System.Drawing.Font("Wingdings 3", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+			this.btnViewSpecialtyCases.Location = new System.Drawing.Point(451, 12);
+			this.btnViewSpecialtyCases.Name = "btnViewSpecialtyCases";
+			this.btnViewSpecialtyCases.Size = new System.Drawing.Size(29, 24);
+			this.btnViewSpecialtyCases.TabIndex = 22;
+			this.btnViewSpecialtyCases.Text = "u";
+			this.btnViewSpecialtyCases.UseVisualStyleBackColor = false;
+			this.btnViewSpecialtyCases.Click += new System.EventHandler(this.btnViewSpecialtyCases_Click);
+			// 
+			// button3
+			// 
+			this.button3.BackColor = System.Drawing.Color.Black;
+			this.button3.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
+			this.button3.Font = new System.Drawing.Font("Arial", 9.75F, System.Drawing.FontStyle.Underline, System.Drawing.GraphicsUnit.Point);
+			this.button3.ForeColor = System.Drawing.Color.White;
+			this.button3.Location = new System.Drawing.Point(38, 276);
+			this.button3.Name = "button3";
+			this.button3.Size = new System.Drawing.Size(85, 25);
+			this.button3.TabIndex = 23;
+			this.button3.Text = "#Learning";
+			this.button3.UseVisualStyleBackColor = false;
+			this.button3.Click += new System.EventHandler(this.AddPresetTag_Click);
+			// 
+			// button4
+			// 
+			this.button4.BackColor = System.Drawing.Color.Black;
+			this.button4.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
+			this.button4.Font = new System.Drawing.Font("Arial", 9.75F, System.Drawing.FontStyle.Underline, System.Drawing.GraphicsUnit.Point);
+			this.button4.ForeColor = System.Drawing.Color.White;
+			this.button4.Location = new System.Drawing.Point(129, 276);
+			this.button4.Name = "button4";
+			this.button4.Size = new System.Drawing.Size(50, 25);
+			this.button4.TabIndex = 24;
+			this.button4.Text = "#Rare";
+			this.button4.UseVisualStyleBackColor = false;
+			this.button4.Click += new System.EventHandler(this.AddPresetTag_Click);
+			// 
+			// button5
+			// 
+			this.button5.BackColor = System.Drawing.Color.Black;
+			this.button5.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
+			this.button5.Font = new System.Drawing.Font("Arial", 9.75F, System.Drawing.FontStyle.Underline, System.Drawing.GraphicsUnit.Point);
+			this.button5.ForeColor = System.Drawing.Color.White;
+			this.button5.Location = new System.Drawing.Point(192, 276);
+			this.button5.Name = "button5";
+			this.button5.Size = new System.Drawing.Size(84, 25);
+			this.button5.TabIndex = 25;
+			this.button5.Text = "#FollowUp";
+			this.button5.UseVisualStyleBackColor = false;
+			this.button5.Click += new System.EventHandler(this.AddPresetTag_Click);
 			// 
 			// CaseLogForm2
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.BackColor = System.Drawing.Color.Black;
-			this.ClientSize = new System.Drawing.Size(499, 495);
+			this.ClientSize = new System.Drawing.Size(494, 536);
+			this.Controls.Add(this.button5);
+			this.Controls.Add(this.button4);
+			this.Controls.Add(this.button3);
+			this.Controls.Add(this.btnViewSpecialtyCases);
+			this.Controls.Add(this.btnEditListSpeciality);
 			this.Controls.Add(this.txtTags);
 			this.Controls.Add(this.button1);
 			this.Controls.Add(this.btnSave);
@@ -329,7 +401,6 @@ namespace MyCaseLog
 			this.Controls.Add(this.txtNotes);
 			this.Controls.Add(this.label4);
 			this.Controls.Add(this.chkKeepBodyPart);
-			this.Controls.Add(this.chkKeepSpecialty);
 			this.Controls.Add(this.txtPTID);
 			this.Controls.Add(this.cboPIDType);
 			this.Controls.Add(this.label3);
@@ -359,7 +430,6 @@ namespace MyCaseLog
 		private System.Windows.Forms.Label label3;
 		private System.Windows.Forms.ComboBox cboPIDType;
 		private System.Windows.Forms.TextBox txtPTID;
-		private System.Windows.Forms.CheckBox chkKeepSpecialty;
 		private System.Windows.Forms.CheckBox chkKeepBodyPart;
 		private System.Windows.Forms.Label label4;
 		private System.Windows.Forms.TextBox txtNotes;
@@ -373,5 +443,10 @@ namespace MyCaseLog
 		private System.Windows.Forms.Button btnSave;
 		private System.Windows.Forms.Button button1;
 		private System.Windows.Forms.TextBox txtTags;
+		private System.Windows.Forms.Button btnEditListSpeciality;
+		private System.Windows.Forms.Button btnViewSpecialtyCases;
+		private System.Windows.Forms.Button button3;
+		private System.Windows.Forms.Button button4;
+		private System.Windows.Forms.Button button5;
 	}
 }
