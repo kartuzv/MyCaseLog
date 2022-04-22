@@ -669,6 +669,14 @@ namespace MyCaseLog.Controllers
             paragraph1.InsertBefore(run1, endParagraphRunProperties1);
         }
 
+        public string GetSlideNotes(SlidePart slidePart)
+        {
+            string notes = "";
+            ShapeTree tree = slidePart.NotesSlidePart.NotesSlide.Descendants<ShapeTree>().First();
+            notes = tree.ChildElements.ElementAt(3).InnerText;// tree.Descendants<A.Run>().First().Text.Text;
+            return notes;
+        }
+
         private void GenerateNotesSlidePartContent(NotesSlidePart notesSlidePart1, string slideNotes, int slideNum)
         {
             NotesSlide notesSlide1 = new NotesSlide();
@@ -996,16 +1004,23 @@ namespace MyCaseLog.Controllers
             using (document = PresentationDocument.Open(pathToSlideCollection, false))
             {
                 var lstSlideParts = document.PresentationPart.GetSlidePartsInOrder();
-                             
+                int caseIdx = 1;
                 foreach (SlidePart sp in lstSlideParts)
                 {
                     string slideTitle = GetSlideTitle(sp);
                     if (slideTitle.StartsWith("[1/"))
-                    { 
-                        if (removeSpecialtyFromTitle)
-                            titles.Add(slideTitle.Substring(slideTitle.IndexOf("|") + 1));
-                        else
-                            titles.Add(slideTitle.Substring(slideTitle.IndexOf("]") + 2));
+                    {
+                        string slideNotes = GetSlideNotes(sp);
+
+                        string notes = slideNotes.Substring(0, slideNotes.IndexOf("[")-1);
+                        string tags = slideNotes.Substring(slideNotes.IndexOf("["));
+                        string formattedTitle = slideTitle.Substring(slideTitle.IndexOf("|") + 1);
+                        //less frequent scenario
+                        if (!removeSpecialtyFromTitle)
+                            formattedTitle = slideTitle.Substring(slideTitle.IndexOf("]") + 2);
+
+                        titles.Add($"{caseIdx}|{formattedTitle}|{tags}|{notes}");
+                        caseIdx++;
                     }
                         
                 } 

@@ -2,6 +2,7 @@
 using MyCaseLog.Properties;
 using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Drawing;
 using System.IO;
 using System.Linq;
@@ -47,7 +48,7 @@ namespace MyCaseLog
             }
 
             //load user configuarable bodypart
-            string[] _bodypartList = Settings.Default.BodyPartList.Split('|', StringSplitOptions.RemoveEmptyEntries);
+            _bodypartList = Settings.Default.BodyPartList.Split('|', StringSplitOptions.RemoveEmptyEntries);
             if (_bodypartList.Length > 0)
             {
                 Array.Sort(_bodypartList, StringComparer.InvariantCulture);
@@ -200,6 +201,8 @@ namespace MyCaseLog
 
             imageList1.Images.Clear();
             snaps.Clear();
+
+            //this.WindowState = FormWindowState.Minimized;
         }
 
         private CaseLogEntry GetFormEntryData()
@@ -209,8 +212,7 @@ namespace MyCaseLog
             e.LogStudyPath = Path.Combine(Settings.Default.LogDir, e.LogTSID);
            
             e.Specialty = cboSpecialty.Text;
-            e.BodyPart = cboBodyPart.Text;
-            
+            e.BodyPart = cboBodyPart.Text;           
             e.Tags = txtTags.Text.Trim();
             e.Notes = txtNotes.Text.Trim();
             e.PTIdType = cboPIDType.Text;
@@ -239,13 +241,31 @@ namespace MyCaseLog
                 _specialtyList = frmEditr.ItemList.ToArray();
                 cboSpecialty.Items.Clear();
                 cboSpecialty.Items.AddRange(_specialtyList);
+
+                Settings.Default.SpecialityList = string.Join('|', _specialtyList);
+                Settings.Default.Save();
             }
             frmEditr.Close();
             frmEditr.Dispose();
-           
-		}
+        }
 
-		private void AddPresetTag_Click(object sender, EventArgs e)
+        private void btnEditListBodyPart_Click(object sender, EventArgs e)
+        {
+            FrmListEditor frmEditr = new FrmListEditor(_bodypartList, "Body Part");
+            if (frmEditr.ShowDialog() == DialogResult.OK)
+            {
+                _bodypartList = frmEditr.ItemList.ToArray();
+                cboBodyPart.Items.Clear();
+                cboBodyPart.Items.AddRange(_bodypartList);
+
+                Settings.Default.BodyPartList = string.Join('|', _bodypartList);
+                Settings.Default.Save();
+            }
+            frmEditr.Close();
+            frmEditr.Dispose();
+        }
+
+        private void AddPresetTag_Click(object sender, EventArgs e)
 		{
             txtTags.Text = txtTags.Text + " " + ((Button)sender).Text;
 		}
@@ -257,13 +277,31 @@ namespace MyCaseLog
             btnViewSpecialtyCases.Text = btnOpenerIcon;
 
             this.Width = newWidth;
+            DataTable dtList = new DataTable();
+            dtList.Columns.Add("#", typeof(string));
+            dtList.Columns.Add("BodyPart", typeof(string));
+            dtList.Columns.Add("MRN", typeof(string));
+            dtList.Columns.Add("Date", typeof(string));
+            dtList.Columns.Add("Tags", typeof(string));
+            dtList.Columns.Add("Notes", typeof(string));
 
             if (this.Width == 1000)
             {
                 PowerPointController p = new PowerPointController(Settings.Default.LogDir, pptxTemplatePath);
                 List<string> pptTitles= p.GetAllCaseTitles(cboSpecialty.Text);
+                foreach (string titleCSV in pptTitles)
+                {
+                    string[] t = titleCSV.Split("|");
+                    t[2] = t[2].Replace("MRN:", "");
+                    t[4] = t[4].Replace("[TAGS]:", "");
+
+                    dtList.Rows.Add(t);
+                }
+                gvCaseList.DataSource = dtList;
             }
 		}
+
+		
 
 		/* https://code-examples.net/en/q/207b9
          // AutoCompleteStringCollection   

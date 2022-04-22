@@ -31,6 +31,8 @@ namespace MyCaseLog
 		{
 			this.components = new System.ComponentModel.Container();
 			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(CaseLogForm2));
+			System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
+			System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
 			this.label1 = new System.Windows.Forms.Label();
 			this.label2 = new System.Windows.Forms.Label();
 			this.cboSpecialty = new System.Windows.Forms.ComboBox();
@@ -56,6 +58,9 @@ namespace MyCaseLog
 			this.button3 = new System.Windows.Forms.Button();
 			this.button4 = new System.Windows.Forms.Button();
 			this.button5 = new System.Windows.Forms.Button();
+			this.btnEditListBodyPart = new System.Windows.Forms.Button();
+			this.gvCaseList = new System.Windows.Forms.DataGridView();
+			((System.ComponentModel.ISupportInitialize)(this.gvCaseList)).BeginInit();
 			this.SuspendLayout();
 			// 
 			// label1
@@ -64,9 +69,9 @@ namespace MyCaseLog
 			this.label1.ForeColor = System.Drawing.Color.White;
 			this.label1.Location = new System.Drawing.Point(11, 15);
 			this.label1.Name = "label1";
-			this.label1.Size = new System.Drawing.Size(82, 15);
+			this.label1.Size = new System.Drawing.Size(57, 15);
 			this.label1.TabIndex = 0;
-			this.label1.Text = "Sub-Specialty:";
+			this.label1.Text = "Specialty:";
 			// 
 			// label2
 			// 
@@ -314,9 +319,9 @@ namespace MyCaseLog
 			this.btnEditListSpeciality.Font = new System.Drawing.Font("Arial Narrow", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
 			this.btnEditListSpeciality.ForeColor = System.Drawing.Color.White;
 			this.btnEditListSpeciality.Image = ((System.Drawing.Image)(resources.GetObject("btnEditListSpeciality.Image")));
-			this.btnEditListSpeciality.Location = new System.Drawing.Point(92, 13);
+			this.btnEditListSpeciality.Location = new System.Drawing.Point(90, 13);
 			this.btnEditListSpeciality.Name = "btnEditListSpeciality";
-			this.btnEditListSpeciality.Size = new System.Drawing.Size(22, 22);
+			this.btnEditListSpeciality.Size = new System.Drawing.Size(23, 22);
 			this.btnEditListSpeciality.TabIndex = 21;
 			this.btnEditListSpeciality.TabStop = false;
 			this.btnEditListSpeciality.TextAlign = System.Drawing.ContentAlignment.TopCenter;
@@ -342,7 +347,7 @@ namespace MyCaseLog
 			this.button3.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
 			this.button3.Font = new System.Drawing.Font("Arial", 9.75F, System.Drawing.FontStyle.Underline, System.Drawing.GraphicsUnit.Point);
 			this.button3.ForeColor = System.Drawing.Color.White;
-			this.button3.Location = new System.Drawing.Point(38, 276);
+			this.button3.Location = new System.Drawing.Point(51, 276);
 			this.button3.Name = "button3";
 			this.button3.Size = new System.Drawing.Size(85, 25);
 			this.button3.TabIndex = 23;
@@ -356,7 +361,7 @@ namespace MyCaseLog
 			this.button4.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
 			this.button4.Font = new System.Drawing.Font("Arial", 9.75F, System.Drawing.FontStyle.Underline, System.Drawing.GraphicsUnit.Point);
 			this.button4.ForeColor = System.Drawing.Color.White;
-			this.button4.Location = new System.Drawing.Point(129, 276);
+			this.button4.Location = new System.Drawing.Point(136, 276);
 			this.button4.Name = "button4";
 			this.button4.Size = new System.Drawing.Size(50, 25);
 			this.button4.TabIndex = 24;
@@ -378,12 +383,58 @@ namespace MyCaseLog
 			this.button5.UseVisualStyleBackColor = false;
 			this.button5.Click += new System.EventHandler(this.AddPresetTag_Click);
 			// 
+			// btnEditListBodyPart
+			// 
+			this.btnEditListBodyPart.BackColor = System.Drawing.Color.Black;
+			this.btnEditListBodyPart.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+			this.btnEditListBodyPart.Font = new System.Drawing.Font("Arial Narrow", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
+			this.btnEditListBodyPart.ForeColor = System.Drawing.Color.White;
+			this.btnEditListBodyPart.Image = ((System.Drawing.Image)(resources.GetObject("btnEditListBodyPart.Image")));
+			this.btnEditListBodyPart.Location = new System.Drawing.Point(90, 54);
+			this.btnEditListBodyPart.Name = "btnEditListBodyPart";
+			this.btnEditListBodyPart.Size = new System.Drawing.Size(22, 22);
+			this.btnEditListBodyPart.TabIndex = 26;
+			this.btnEditListBodyPart.TabStop = false;
+			this.btnEditListBodyPart.TextAlign = System.Drawing.ContentAlignment.TopCenter;
+			this.btnEditListBodyPart.UseVisualStyleBackColor = false;
+			this.btnEditListBodyPart.Click += new System.EventHandler(this.btnEditListBodyPart_Click);
+			// 
+			// gvCaseList
+			// 
+			this.gvCaseList.AllowUserToAddRows = false;
+			this.gvCaseList.AllowUserToDeleteRows = false;
+			dataGridViewCellStyle1.BackColor = System.Drawing.Color.Black;
+			dataGridViewCellStyle1.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+			dataGridViewCellStyle1.ForeColor = System.Drawing.Color.White;
+			dataGridViewCellStyle1.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+			this.gvCaseList.AlternatingRowsDefaultCellStyle = dataGridViewCellStyle1;
+			this.gvCaseList.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left)));
+			this.gvCaseList.BackgroundColor = System.Drawing.Color.Black;
+			this.gvCaseList.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+			this.gvCaseList.GridColor = System.Drawing.Color.White;
+			this.gvCaseList.Location = new System.Drawing.Point(516, 15);
+			this.gvCaseList.MultiSelect = false;
+			this.gvCaseList.Name = "gvCaseList";
+			this.gvCaseList.ReadOnly = true;
+			dataGridViewCellStyle2.BackColor = System.Drawing.Color.Black;
+			dataGridViewCellStyle2.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+			dataGridViewCellStyle2.ForeColor = System.Drawing.Color.White;
+			dataGridViewCellStyle2.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+			this.gvCaseList.RowsDefaultCellStyle = dataGridViewCellStyle2;
+			this.gvCaseList.RowTemplate.Height = 25;
+			this.gvCaseList.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.CellSelect;
+			this.gvCaseList.Size = new System.Drawing.Size(466, 507);
+			this.gvCaseList.TabIndex = 27;
+			// 
 			// CaseLogForm2
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.BackColor = System.Drawing.Color.Black;
-			this.ClientSize = new System.Drawing.Size(494, 536);
+			this.ClientSize = new System.Drawing.Size(495, 536);
+			this.Controls.Add(this.gvCaseList);
+			this.Controls.Add(this.btnEditListBodyPart);
 			this.Controls.Add(this.button5);
 			this.Controls.Add(this.button4);
 			this.Controls.Add(this.button3);
@@ -416,6 +467,7 @@ namespace MyCaseLog
 			this.Text = "MyCaseLog";
 			this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.CaseLogForm2_FormClosing);
 			this.Load += new System.EventHandler(this.CaseLogForm2_Load);
+			((System.ComponentModel.ISupportInitialize)(this.gvCaseList)).EndInit();
 			this.ResumeLayout(false);
 			this.PerformLayout();
 
@@ -448,5 +500,7 @@ namespace MyCaseLog
 		private System.Windows.Forms.Button button3;
 		private System.Windows.Forms.Button button4;
 		private System.Windows.Forms.Button button5;
+		private System.Windows.Forms.Button btnEditListBodyPart;
+		private System.Windows.Forms.DataGridView gvCaseList;
 	}
 }
