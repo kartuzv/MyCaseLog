@@ -205,6 +205,8 @@ namespace MyCaseLog.Controllers
                 }
 
                 int slidesTotal = (e.snaps.Count % 2)==1? (e.snaps.Count+1)/2: e.snaps.Count/2;
+                if (e.snaps.Count == 0)//special case - blank slide, no images.
+                    slidesTotal = 1;
 
                 AddCaseSlideToPresentation(presentationPart, firstSlideAsTemplate, e, 1, slidesTotal,targetSlide);
 

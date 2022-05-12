@@ -51,7 +51,7 @@ namespace MyCaseLog
 			this.chkPPTX = new System.Windows.Forms.CheckBox();
 			this.chkXLSX = new System.Windows.Forms.CheckBox();
 			this.btnSave = new System.Windows.Forms.Button();
-			this.button1 = new System.Windows.Forms.Button();
+			this.btnView = new System.Windows.Forms.Button();
 			this.txtTags = new System.Windows.Forms.TextBox();
 			this.btnEditListSpeciality = new System.Windows.Forms.Button();
 			this.btnViewSpecialtyCases = new System.Windows.Forms.Button();
@@ -69,9 +69,9 @@ namespace MyCaseLog
 			this.label1.ForeColor = System.Drawing.Color.White;
 			this.label1.Location = new System.Drawing.Point(11, 15);
 			this.label1.Name = "label1";
-			this.label1.Size = new System.Drawing.Size(57, 15);
+			this.label1.Size = new System.Drawing.Size(60, 15);
 			this.label1.TabIndex = 0;
-			this.label1.Text = "Specialty:";
+			this.label1.Text = "Speciality:";
 			// 
 			// label2
 			// 
@@ -229,6 +229,7 @@ namespace MyCaseLog
 			this.btnCaptureScreen.TabIndex = 14;
 			this.btnCaptureScreen.Text = "+Video";
 			this.btnCaptureScreen.UseVisualStyleBackColor = false;
+			this.btnCaptureScreen.Visible = false;
 			this.btnCaptureScreen.Click += new System.EventHandler(this.btnCaptureScreen_Click);
 			// 
 			// listView1
@@ -259,7 +260,7 @@ namespace MyCaseLog
 			this.chkPPTX.Checked = true;
 			this.chkPPTX.CheckState = System.Windows.Forms.CheckState.Checked;
 			this.chkPPTX.ForeColor = System.Drawing.Color.White;
-			this.chkPPTX.Location = new System.Drawing.Point(12, 479);
+			this.chkPPTX.Location = new System.Drawing.Point(99, 504);
 			this.chkPPTX.Name = "chkPPTX";
 			this.chkPPTX.Size = new System.Drawing.Size(54, 19);
 			this.chkPPTX.TabIndex = 16;
@@ -269,8 +270,10 @@ namespace MyCaseLog
 			// chkXLSX
 			// 
 			this.chkXLSX.AutoSize = true;
+			this.chkXLSX.Checked = true;
+			this.chkXLSX.CheckState = System.Windows.Forms.CheckState.Checked;
 			this.chkXLSX.ForeColor = System.Drawing.Color.White;
-			this.chkXLSX.Location = new System.Drawing.Point(12, 505);
+			this.chkXLSX.Location = new System.Drawing.Point(99, 479);
 			this.chkXLSX.Name = "chkXLSX";
 			this.chkXLSX.Size = new System.Drawing.Size(52, 19);
 			this.chkXLSX.TabIndex = 17;
@@ -282,7 +285,7 @@ namespace MyCaseLog
 			// 
 			this.btnSave.BackColor = System.Drawing.Color.Black;
 			this.btnSave.ForeColor = System.Drawing.Color.White;
-			this.btnSave.Location = new System.Drawing.Point(310, 479);
+			this.btnSave.Location = new System.Drawing.Point(310, 480);
 			this.btnSave.Name = "btnSave";
 			this.btnSave.Size = new System.Drawing.Size(171, 45);
 			this.btnSave.TabIndex = 18;
@@ -290,17 +293,17 @@ namespace MyCaseLog
 			this.btnSave.UseVisualStyleBackColor = false;
 			this.btnSave.Click += new System.EventHandler(this.btnSave_Click);
 			// 
-			// button1
+			// btnView
 			// 
-			this.button1.BackColor = System.Drawing.Color.Black;
-			this.button1.ForeColor = System.Drawing.Color.White;
-			this.button1.Location = new System.Drawing.Point(72, 479);
-			this.button1.Name = "button1";
-			this.button1.Size = new System.Drawing.Size(65, 43);
-			this.button1.TabIndex = 19;
-			this.button1.Text = "View";
-			this.button1.UseVisualStyleBackColor = false;
-			this.button1.Click += new System.EventHandler(this.button1_Click);
+			this.btnView.BackColor = System.Drawing.Color.Black;
+			this.btnView.ForeColor = System.Drawing.Color.White;
+			this.btnView.Location = new System.Drawing.Point(13, 479);
+			this.btnView.Name = "btnView";
+			this.btnView.Size = new System.Drawing.Size(80, 45);
+			this.btnView.TabIndex = 19;
+			this.btnView.Text = "View Log";
+			this.btnView.UseVisualStyleBackColor = false;
+			this.btnView.Click += new System.EventHandler(this.btnView_Click);
 			// 
 			// txtTags
 			// 
@@ -332,12 +335,13 @@ namespace MyCaseLog
 			// 
 			this.btnViewSpecialtyCases.BackColor = System.Drawing.Color.Black;
 			this.btnViewSpecialtyCases.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-			this.btnViewSpecialtyCases.Font = new System.Drawing.Font("Wingdings 3", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-			this.btnViewSpecialtyCases.Location = new System.Drawing.Point(451, 12);
+			this.btnViewSpecialtyCases.Font = new System.Drawing.Font("Webdings", 20.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+			this.btnViewSpecialtyCases.Location = new System.Drawing.Point(441, 4);
 			this.btnViewSpecialtyCases.Name = "btnViewSpecialtyCases";
-			this.btnViewSpecialtyCases.Size = new System.Drawing.Size(29, 24);
+			this.btnViewSpecialtyCases.Size = new System.Drawing.Size(51, 38);
 			this.btnViewSpecialtyCases.TabIndex = 22;
-			this.btnViewSpecialtyCases.Text = "u";
+			this.btnViewSpecialtyCases.Text = "L";
+			this.btnViewSpecialtyCases.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
 			this.btnViewSpecialtyCases.UseVisualStyleBackColor = false;
 			this.btnViewSpecialtyCases.Click += new System.EventHandler(this.btnViewSpecialtyCases_Click);
 			// 
@@ -410,10 +414,10 @@ namespace MyCaseLog
 			this.gvCaseList.AlternatingRowsDefaultCellStyle = dataGridViewCellStyle1;
 			this.gvCaseList.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left)));
-			this.gvCaseList.BackgroundColor = System.Drawing.Color.Black;
+			this.gvCaseList.BackgroundColor = System.Drawing.Color.Gray;
 			this.gvCaseList.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
 			this.gvCaseList.GridColor = System.Drawing.Color.White;
-			this.gvCaseList.Location = new System.Drawing.Point(516, 15);
+			this.gvCaseList.Location = new System.Drawing.Point(404, 101);
 			this.gvCaseList.MultiSelect = false;
 			this.gvCaseList.Name = "gvCaseList";
 			this.gvCaseList.ReadOnly = true;
@@ -424,15 +428,16 @@ namespace MyCaseLog
 			this.gvCaseList.RowsDefaultCellStyle = dataGridViewCellStyle2;
 			this.gvCaseList.RowTemplate.Height = 25;
 			this.gvCaseList.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.CellSelect;
-			this.gvCaseList.Size = new System.Drawing.Size(466, 507);
+			this.gvCaseList.Size = new System.Drawing.Size(76, 54);
 			this.gvCaseList.TabIndex = 27;
+			this.gvCaseList.Visible = false;
 			// 
 			// CaseLogForm2
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.BackColor = System.Drawing.Color.Black;
-			this.ClientSize = new System.Drawing.Size(495, 536);
+			this.ClientSize = new System.Drawing.Size(494, 537);
 			this.Controls.Add(this.gvCaseList);
 			this.Controls.Add(this.btnEditListBodyPart);
 			this.Controls.Add(this.button5);
@@ -441,7 +446,7 @@ namespace MyCaseLog
 			this.Controls.Add(this.btnViewSpecialtyCases);
 			this.Controls.Add(this.btnEditListSpeciality);
 			this.Controls.Add(this.txtTags);
-			this.Controls.Add(this.button1);
+			this.Controls.Add(this.btnView);
 			this.Controls.Add(this.btnSave);
 			this.Controls.Add(this.chkXLSX);
 			this.Controls.Add(this.chkPPTX);
@@ -493,7 +498,7 @@ namespace MyCaseLog
 		private System.Windows.Forms.CheckBox chkPPTX;
 		private System.Windows.Forms.CheckBox chkXLSX;
 		private System.Windows.Forms.Button btnSave;
-		private System.Windows.Forms.Button button1;
+		private System.Windows.Forms.Button btnView;
 		private System.Windows.Forms.TextBox txtTags;
 		private System.Windows.Forms.Button btnEditListSpeciality;
 		private System.Windows.Forms.Button btnViewSpecialtyCases;

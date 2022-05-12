@@ -6,15 +6,19 @@
     <UseWindowsForms>true</UseWindowsForms>
     <Authors>Vadim Kartuzov</Authors>
     <Company></Company>
+    <Version>2.0.0</Version>
   </PropertyGroup>
 
   <ItemGroup>
     <Compile Remove="LogArchive\**" />
     <Compile Remove="MyLog\**" />
+    <Compile Remove="Saved\**" />
     <EmbeddedResource Remove="LogArchive\**" />
     <EmbeddedResource Remove="MyLog\**" />
+    <EmbeddedResource Remove="Saved\**" />
     <None Remove="LogArchive\**" />
     <None Remove="MyLog\**" />
+    <None Remove="Saved\**" />
   </ItemGroup>
 
   <ItemGroup>
