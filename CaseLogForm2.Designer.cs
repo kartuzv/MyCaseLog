@@ -31,8 +31,8 @@ namespace MyCaseLog
 		{
 			this.components = new System.ComponentModel.Container();
 			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(CaseLogForm2));
-			System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
-			System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
+			System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle3 = new System.Windows.Forms.DataGridViewCellStyle();
+			System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle4 = new System.Windows.Forms.DataGridViewCellStyle();
 			this.label1 = new System.Windows.Forms.Label();
 			this.label2 = new System.Windows.Forms.Label();
 			this.cboSpecialty = new System.Windows.Forms.ComboBox();
@@ -91,14 +91,14 @@ namespace MyCaseLog
 			this.cboSpecialty.ForeColor = System.Drawing.Color.White;
 			this.cboSpecialty.FormattingEnabled = true;
 			this.cboSpecialty.Items.AddRange(new object[] {
-            "Abdominal",
-            "Chest",
-            "Body",
-            "Nuclear",
-            "Mammo",
-            "Neuro",
-            "Pediatrics",
-            "MSK"});
+			"Abdominal",
+			"Chest",
+			"Body",
+			"Nuclear",
+			"Mammo",
+			"Neuro",
+			"Pediatrics",
+			"MSK"});
 			this.cboSpecialty.Location = new System.Drawing.Point(118, 13);
 			this.cboSpecialty.Name = "cboSpecialty";
 			this.cboSpecialty.Size = new System.Drawing.Size(299, 23);
@@ -112,19 +112,19 @@ namespace MyCaseLog
 			this.cboBodyPart.ForeColor = System.Drawing.Color.White;
 			this.cboBodyPart.FormattingEnabled = true;
 			this.cboBodyPart.Items.AddRange(new object[] {
-            "Liver",
-            "GB/Biliary",
-            "Pancreas",
-            "Kidneys/Ureters/Bladder",
-            "Adrenals",
-            "Lymph nodes",
-            "Bowel",
-            "Vasculature",
-            "Female Gyn",
-            "Male GU",
-            "Genitourinary",
-            "Bones",
-            "Other"});
+			"Liver",
+			"GB/Biliary",
+			"Pancreas",
+			"Kidneys/Ureters/Bladder",
+			"Adrenals",
+			"Lymph nodes",
+			"Bowel",
+			"Vasculature",
+			"Female Gyn",
+			"Male GU",
+			"Genitourinary",
+			"Bones",
+			"Other"});
 			this.cboBodyPart.Location = new System.Drawing.Point(118, 53);
 			this.cboBodyPart.Name = "cboBodyPart";
 			this.cboBodyPart.Size = new System.Drawing.Size(299, 23);
@@ -148,8 +148,8 @@ namespace MyCaseLog
 			this.cboPIDType.ForeColor = System.Drawing.Color.White;
 			this.cboPIDType.FormattingEnabled = true;
 			this.cboPIDType.Items.AddRange(new object[] {
-            "MRN",
-            "Accession"});
+			"MRN",
+			"Accession"});
 			this.cboPIDType.Location = new System.Drawing.Point(99, 101);
 			this.cboPIDType.Name = "cboPIDType";
 			this.cboPIDType.Size = new System.Drawing.Size(129, 23);
@@ -260,12 +260,13 @@ namespace MyCaseLog
 			this.chkPPTX.Checked = true;
 			this.chkPPTX.CheckState = System.Windows.Forms.CheckState.Checked;
 			this.chkPPTX.ForeColor = System.Drawing.Color.White;
-			this.chkPPTX.Location = new System.Drawing.Point(99, 504);
+			this.chkPPTX.Location = new System.Drawing.Point(82, 339);
 			this.chkPPTX.Name = "chkPPTX";
 			this.chkPPTX.Size = new System.Drawing.Size(54, 19);
 			this.chkPPTX.TabIndex = 16;
 			this.chkPPTX.Text = "PPTX";
 			this.chkPPTX.UseVisualStyleBackColor = true;
+			this.chkPPTX.Visible = false;
 			// 
 			// chkXLSX
 			// 
@@ -273,7 +274,7 @@ namespace MyCaseLog
 			this.chkXLSX.Checked = true;
 			this.chkXLSX.CheckState = System.Windows.Forms.CheckState.Checked;
 			this.chkXLSX.ForeColor = System.Drawing.Color.White;
-			this.chkXLSX.Location = new System.Drawing.Point(99, 479);
+			this.chkXLSX.Location = new System.Drawing.Point(19, 339);
 			this.chkXLSX.Name = "chkXLSX";
 			this.chkXLSX.Size = new System.Drawing.Size(52, 19);
 			this.chkXLSX.TabIndex = 17;
@@ -285,9 +286,9 @@ namespace MyCaseLog
 			// 
 			this.btnSave.BackColor = System.Drawing.Color.Black;
 			this.btnSave.ForeColor = System.Drawing.Color.White;
-			this.btnSave.Location = new System.Drawing.Point(310, 480);
+			this.btnSave.Location = new System.Drawing.Point(327, 480);
 			this.btnSave.Name = "btnSave";
-			this.btnSave.Size = new System.Drawing.Size(171, 45);
+			this.btnSave.Size = new System.Drawing.Size(154, 45);
 			this.btnSave.TabIndex = 18;
 			this.btnSave.Text = "Save Case";
 			this.btnSave.UseVisualStyleBackColor = false;
@@ -299,7 +300,7 @@ namespace MyCaseLog
 			this.btnView.ForeColor = System.Drawing.Color.White;
 			this.btnView.Location = new System.Drawing.Point(13, 479);
 			this.btnView.Name = "btnView";
-			this.btnView.Size = new System.Drawing.Size(80, 45);
+			this.btnView.Size = new System.Drawing.Size(133, 45);
 			this.btnView.TabIndex = 19;
 			this.btnView.Text = "View Log";
 			this.btnView.UseVisualStyleBackColor = false;
@@ -407,13 +408,13 @@ namespace MyCaseLog
 			// 
 			this.gvCaseList.AllowUserToAddRows = false;
 			this.gvCaseList.AllowUserToDeleteRows = false;
-			dataGridViewCellStyle1.BackColor = System.Drawing.Color.Black;
-			dataGridViewCellStyle1.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-			dataGridViewCellStyle1.ForeColor = System.Drawing.Color.White;
-			dataGridViewCellStyle1.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
-			this.gvCaseList.AlternatingRowsDefaultCellStyle = dataGridViewCellStyle1;
-			this.gvCaseList.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left)));
+			dataGridViewCellStyle3.BackColor = System.Drawing.Color.Black;
+			dataGridViewCellStyle3.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+			dataGridViewCellStyle3.ForeColor = System.Drawing.Color.White;
+			dataGridViewCellStyle3.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+			this.gvCaseList.AlternatingRowsDefaultCellStyle = dataGridViewCellStyle3;
+			this.gvCaseList.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+			| System.Windows.Forms.AnchorStyles.Left)));
 			this.gvCaseList.BackgroundColor = System.Drawing.Color.Gray;
 			this.gvCaseList.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
 			this.gvCaseList.GridColor = System.Drawing.Color.White;
@@ -421,11 +422,11 @@ namespace MyCaseLog
 			this.gvCaseList.MultiSelect = false;
 			this.gvCaseList.Name = "gvCaseList";
 			this.gvCaseList.ReadOnly = true;
-			dataGridViewCellStyle2.BackColor = System.Drawing.Color.Black;
-			dataGridViewCellStyle2.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-			dataGridViewCellStyle2.ForeColor = System.Drawing.Color.White;
-			dataGridViewCellStyle2.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
-			this.gvCaseList.RowsDefaultCellStyle = dataGridViewCellStyle2;
+			dataGridViewCellStyle4.BackColor = System.Drawing.Color.Black;
+			dataGridViewCellStyle4.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+			dataGridViewCellStyle4.ForeColor = System.Drawing.Color.White;
+			dataGridViewCellStyle4.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+			this.gvCaseList.RowsDefaultCellStyle = dataGridViewCellStyle4;
 			this.gvCaseList.RowTemplate.Height = 25;
 			this.gvCaseList.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.CellSelect;
 			this.gvCaseList.Size = new System.Drawing.Size(76, 54);
