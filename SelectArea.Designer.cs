@@ -32,6 +32,7 @@ namespace MyCaseLog
 			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(SelectArea));
 			this.panelDrag = new System.Windows.Forms.Panel();
 			this.btnCaptureThis = new System.Windows.Forms.Button();
+			this.btnCloseSelectArea = new System.Windows.Forms.Button();
 			this.SuspendLayout();
 			// 
 			// panelDrag
@@ -61,12 +62,26 @@ namespace MyCaseLog
 			this.btnCaptureThis.UseVisualStyleBackColor = false;
 			this.btnCaptureThis.Click += new System.EventHandler(this.btnCaptureThis_Click);
 			// 
+			// btnCloseSelectArea
+			// 
+			this.btnCloseSelectArea.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+			this.btnCloseSelectArea.BackgroundImage = global::MyCaseLog.Properties.Resources.Cancel2;
+			this.btnCloseSelectArea.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center;
+			this.btnCloseSelectArea.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+			this.btnCloseSelectArea.Location = new System.Drawing.Point(397, 0);
+			this.btnCloseSelectArea.Name = "btnCloseSelectArea";
+			this.btnCloseSelectArea.Size = new System.Drawing.Size(22, 23);
+			this.btnCloseSelectArea.TabIndex = 0;
+			this.btnCloseSelectArea.UseVisualStyleBackColor = true;
+			this.btnCloseSelectArea.Click += new System.EventHandler(this.btnCloseSelectArea_Click);
+			// 
 			// SelectArea
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.BackColor = System.Drawing.SystemColors.Control;
 			this.ClientSize = new System.Drawing.Size(418, 413);
+			this.Controls.Add(this.btnCloseSelectArea);
 			this.Controls.Add(this.btnCaptureThis);
 			this.Controls.Add(this.panelDrag);
 			this.ForeColor = System.Drawing.Color.Transparent;
@@ -81,5 +96,6 @@ namespace MyCaseLog
 
 		private System.Windows.Forms.Panel panelDrag;
 		private System.Windows.Forms.Button btnCaptureThis;
+		private System.Windows.Forms.Button btnCloseSelectArea;
 	}
 }

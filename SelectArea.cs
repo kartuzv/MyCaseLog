@@ -14,7 +14,7 @@ namespace MyCaseLog
     public partial class SelectArea : Form
     {
 
-        public CaseLogEntryForm frm;
+        public CaseLogForm2 frm;
 
         //Moving window by click-drag on a control https://stackoverflow.com/a/13477624/5260872
         public const int WM_NCLBUTTONDOWN = 0xA1;
@@ -61,7 +61,13 @@ namespace MyCaseLog
         Rectangle Left { get { return new Rectangle(0, 0, _, this.ClientSize.Height); } }
         Rectangle Bottom { get { return new Rectangle(0, this.ClientSize.Height - _, this.ClientSize.Width, _); } }
         Rectangle Right { get { return new Rectangle(this.ClientSize.Width - _, 0, _, this.ClientSize.Height); } }
-        
+
+		private void btnCloseSelectArea_Click(object sender, EventArgs e)
+		{
+            frm.Show();
+            this.Hide();
+		}
+
 		Rectangle TopLeft { get { return new Rectangle(0, 0, _, _); } }
         Rectangle TopRight { get { return new Rectangle(this.ClientSize.Width - _, 0, _, _); } }
         Rectangle BottomLeft { get { return new Rectangle(0, this.ClientSize.Height - _, _, _); } }
@@ -101,6 +107,8 @@ namespace MyCaseLog
             this.Hide();
             ScreenshotForm save = new ScreenshotForm(this.Location.X, this.Location.Y, this.Width, this.Height, this.Size);
             save.frm = frm;
+            save.StartPosition =  FormStartPosition.Manual;
+            save.Location = this.Location;
             save.Show();
         }
     }

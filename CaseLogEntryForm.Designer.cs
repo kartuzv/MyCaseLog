@@ -72,6 +72,8 @@ namespace MyCaseLog
 			this.btnAddScreenshot = new System.Windows.Forms.Button();
 			this.listView1 = new System.Windows.Forms.ListView();
 			this.imageList1 = new System.Windows.Forms.ImageList(this.components);
+			this.txtDx = new System.Windows.Forms.TextBox();
+			this.label6 = new System.Windows.Forms.Label();
 			this.groupBox1.SuspendLayout();
 			this.groupBox2.SuspendLayout();
 			this.groupBox3.SuspendLayout();
@@ -150,6 +152,8 @@ namespace MyCaseLog
 			// 
 			// groupBox2
 			// 
+			this.groupBox2.Controls.Add(this.label6);
+			this.groupBox2.Controls.Add(this.txtDx);
 			this.groupBox2.Controls.Add(this.label5);
 			this.groupBox2.Controls.Add(this.txtProtocol);
 			this.groupBox2.Controls.Add(this.chkSpine);
@@ -162,7 +166,7 @@ namespace MyCaseLog
 			this.groupBox2.Controls.Add(this.chkHead);
 			this.groupBox2.Location = new System.Drawing.Point(12, 84);
 			this.groupBox2.Name = "groupBox2";
-			this.groupBox2.Size = new System.Drawing.Size(295, 130);
+			this.groupBox2.Size = new System.Drawing.Size(295, 159);
 			this.groupBox2.TabIndex = 2;
 			this.groupBox2.TabStop = false;
 			this.groupBox2.Text = "Study";
@@ -187,89 +191,89 @@ namespace MyCaseLog
 			// chkSpine
 			// 
 			this.chkSpine.Appearance = System.Windows.Forms.Appearance.Button;
-			this.chkSpine.AutoSize = true;
-			this.chkSpine.Location = new System.Drawing.Point(167, 22);
+			this.chkSpine.Location = new System.Drawing.Point(153, 22);
 			this.chkSpine.Name = "chkSpine";
-			this.chkSpine.Size = new System.Drawing.Size(46, 25);
+			this.chkSpine.Size = new System.Drawing.Size(76, 25);
 			this.chkSpine.TabIndex = 9;
 			this.chkSpine.Text = "Spine";
+			this.chkSpine.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
 			this.chkSpine.UseVisualStyleBackColor = true;
 			// 
 			// chkBreast
 			// 
 			this.chkBreast.Appearance = System.Windows.Forms.Appearance.Button;
-			this.chkBreast.AutoSize = true;
 			this.chkBreast.Location = new System.Drawing.Point(82, 53);
 			this.chkBreast.Name = "chkBreast";
-			this.chkBreast.Size = new System.Drawing.Size(49, 25);
+			this.chkBreast.Size = new System.Drawing.Size(52, 25);
 			this.chkBreast.TabIndex = 8;
 			this.chkBreast.Text = "Breast";
+			this.chkBreast.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
 			this.chkBreast.UseVisualStyleBackColor = true;
 			// 
 			// chkNeck
 			// 
 			this.chkNeck.Appearance = System.Windows.Forms.Appearance.Button;
-			this.chkNeck.AutoSize = true;
 			this.chkNeck.Location = new System.Drawing.Point(82, 22);
 			this.chkNeck.Name = "chkNeck";
-			this.chkNeck.Size = new System.Drawing.Size(44, 25);
+			this.chkNeck.Size = new System.Drawing.Size(52, 25);
 			this.chkNeck.TabIndex = 7;
 			this.chkNeck.Text = "Neck";
+			this.chkNeck.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
 			this.chkNeck.UseVisualStyleBackColor = true;
 			// 
 			// chkAbdomen
 			// 
 			this.chkAbdomen.Appearance = System.Windows.Forms.Appearance.Button;
-			this.chkAbdomen.AutoSize = true;
 			this.chkAbdomen.Location = new System.Drawing.Point(153, 53);
 			this.chkAbdomen.Name = "chkAbdomen";
-			this.chkAbdomen.Size = new System.Drawing.Size(70, 25);
+			this.chkAbdomen.Size = new System.Drawing.Size(76, 25);
 			this.chkAbdomen.TabIndex = 6;
 			this.chkAbdomen.Text = "Abdomen";
+			this.chkAbdomen.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
 			this.chkAbdomen.UseVisualStyleBackColor = true;
 			// 
 			// chkChest
 			// 
 			this.chkChest.Appearance = System.Windows.Forms.Appearance.Button;
-			this.chkChest.AutoSize = true;
 			this.chkChest.Location = new System.Drawing.Point(13, 53);
 			this.chkChest.Name = "chkChest";
-			this.chkChest.Size = new System.Drawing.Size(47, 25);
+			this.chkChest.Size = new System.Drawing.Size(45, 25);
 			this.chkChest.TabIndex = 5;
 			this.chkChest.Text = "Chest";
+			this.chkChest.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
 			this.chkChest.UseVisualStyleBackColor = true;
 			// 
 			// chkLeg
 			// 
 			this.chkLeg.Appearance = System.Windows.Forms.Appearance.Button;
-			this.chkLeg.AutoSize = true;
-			this.chkLeg.Location = new System.Drawing.Point(248, 48);
+			this.chkLeg.Location = new System.Drawing.Point(240, 53);
 			this.chkLeg.Name = "chkLeg";
-			this.chkLeg.Size = new System.Drawing.Size(36, 25);
+			this.chkLeg.Size = new System.Drawing.Size(45, 25);
 			this.chkLeg.TabIndex = 4;
 			this.chkLeg.Text = "Leg";
+			this.chkLeg.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
 			this.chkLeg.UseVisualStyleBackColor = true;
 			// 
 			// chkArm
 			// 
 			this.chkArm.Appearance = System.Windows.Forms.Appearance.Button;
-			this.chkArm.AutoSize = true;
-			this.chkArm.Location = new System.Drawing.Point(244, 17);
+			this.chkArm.Location = new System.Drawing.Point(240, 22);
 			this.chkArm.Name = "chkArm";
-			this.chkArm.Size = new System.Drawing.Size(40, 25);
+			this.chkArm.Size = new System.Drawing.Size(45, 25);
 			this.chkArm.TabIndex = 3;
 			this.chkArm.Text = "Arm";
+			this.chkArm.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
 			this.chkArm.UseVisualStyleBackColor = true;
 			// 
 			// chkHead
 			// 
 			this.chkHead.Appearance = System.Windows.Forms.Appearance.Button;
-			this.chkHead.AutoSize = true;
 			this.chkHead.Location = new System.Drawing.Point(12, 22);
 			this.chkHead.Name = "chkHead";
 			this.chkHead.Size = new System.Drawing.Size(45, 25);
 			this.chkHead.TabIndex = 2;
 			this.chkHead.Text = "Head";
+			this.chkHead.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
 			this.chkHead.UseVisualStyleBackColor = true;
 			// 
 			// groupBox3
@@ -284,7 +288,7 @@ namespace MyCaseLog
 			this.groupBox3.Controls.Add(this.label1);
 			this.groupBox3.Controls.Add(this.chkFemale);
 			this.groupBox3.Controls.Add(this.chkMale);
-			this.groupBox3.Location = new System.Drawing.Point(11, 220);
+			this.groupBox3.Location = new System.Drawing.Point(12, 249);
 			this.groupBox3.Name = "groupBox3";
 			this.groupBox3.Size = new System.Drawing.Size(295, 128);
 			this.groupBox3.TabIndex = 7;
@@ -389,18 +393,18 @@ namespace MyCaseLog
 			// groupBox4
 			// 
 			this.groupBox4.Controls.Add(this.rtxtDescr);
-			this.groupBox4.Location = new System.Drawing.Point(12, 354);
+			this.groupBox4.Location = new System.Drawing.Point(12, 392);
 			this.groupBox4.Name = "groupBox4";
-			this.groupBox4.Size = new System.Drawing.Size(294, 143);
+			this.groupBox4.Size = new System.Drawing.Size(294, 105);
 			this.groupBox4.TabIndex = 8;
 			this.groupBox4.TabStop = false;
 			this.groupBox4.Text = "Points of Interest";
 			// 
 			// rtxtDescr
 			// 
-			this.rtxtDescr.Location = new System.Drawing.Point(6, 19);
+			this.rtxtDescr.Location = new System.Drawing.Point(6, 22);
 			this.rtxtDescr.Name = "rtxtDescr";
-			this.rtxtDescr.Size = new System.Drawing.Size(277, 115);
+			this.rtxtDescr.Size = new System.Drawing.Size(277, 77);
 			this.rtxtDescr.TabIndex = 0;
 			this.rtxtDescr.Text = "";
 			// 
@@ -511,6 +515,7 @@ namespace MyCaseLog
 			// 
 			this.listView1.BackColor = System.Drawing.SystemColors.ControlDarkDark;
 			this.listView1.GridLines = true;
+			this.listView1.HideSelection = false;
 			this.listView1.Location = new System.Drawing.Point(328, 12);
 			this.listView1.MultiSelect = false;
 			this.listView1.Name = "listView1";
@@ -526,6 +531,23 @@ namespace MyCaseLog
 			this.imageList1.ColorDepth = System.Windows.Forms.ColorDepth.Depth32Bit;
 			this.imageList1.ImageSize = new System.Drawing.Size(220, 220);
 			this.imageList1.TransparentColor = System.Drawing.Color.Transparent;
+			// 
+			// txtDx
+			// 
+			this.txtDx.Location = new System.Drawing.Point(59, 125);
+			this.txtDx.Name = "txtDx";
+			this.txtDx.Size = new System.Drawing.Size(230, 23);
+			this.txtDx.TabIndex = 18;
+			this.txtDx.Text = "dx-info-goes-here";
+			// 
+			// label6
+			// 
+			this.label6.AutoSize = true;
+			this.label6.Location = new System.Drawing.Point(29, 128);
+			this.label6.Name = "label6";
+			this.label6.Size = new System.Drawing.Size(23, 15);
+			this.label6.TabIndex = 19;
+			this.label6.Text = "Dx:";
 			// 
 			// CaseLogEntryForm
 			// 
@@ -608,5 +630,7 @@ namespace MyCaseLog
 		private System.Windows.Forms.Button btnAddScreenshot;
 		private System.Windows.Forms.ListView listView1;
 		private System.Windows.Forms.ImageList imageList1;
+		private System.Windows.Forms.Label label6;
+		private System.Windows.Forms.TextBox txtDx;
 	}
 }

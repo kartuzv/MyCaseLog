@@ -63,6 +63,36 @@ namespace MyCaseLog.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap Cancel2 {
+            get {
+                object obj = ResourceManager.GetObject("Cancel2", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Byte[].
+        /// </summary>
+        internal static byte[] MyCaseLogTemplate {
+            get {
+                object obj = ResourceManager.GetObject("MyCaseLogTemplate", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Byte[].
+        /// </summary>
+        internal static byte[] PPTemplate2Pic {
+            get {
+                object obj = ResourceManager.GetObject("PPTemplate2Pic", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap searchFolder_128 {
             get {
                 object obj = ResourceManager.GetObject("searchFolder_128", resourceCulture);

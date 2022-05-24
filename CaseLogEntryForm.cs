@@ -80,6 +80,44 @@ namespace MyCaseLog
 
         private void btnSaveToLog_Click(object sender, EventArgs ea)
         {
+
+            CaseLogEntry e = GetFormEntryData();
+            /*
+            SaveEntryToExcel(e);
+            //Debug.WriteLine(e.ToString());
+
+            //if (_gotSnapshot && chkSnap.Checked)
+            //{
+
+
+           // string savingPath = e.LogStudyPath + "\\Screenshot_" + DateTime.Now.ToString("yyyyMMddHHmmss") + ".jpeg";
+            //pictureBox1.Image.Save(savingPath, ImageFormat.Jpeg);
+            //don't create hyperlink to folder unless have screenshot
+            if (snaps.Count > 0)
+            {
+                if (!Directory.Exists(e.LogStudyPath))
+                    Directory.CreateDirectory(e.LogStudyPath);
+
+                int i = 1;
+                foreach (Bitmap img in snaps)
+                {
+                    string savingPath = e.LogStudyPath + "\\Screenshot_" + DateTime.Now.ToString("yyyyMMddhhmmss") + $"_{i}.jpeg";
+                    img.Save(savingPath, ImageFormat.Jpeg);
+                    i++;
+                }
+            }
+            */
+           
+
+
+            //Controllers.PowerPointController.AddMyCaseToCollection(e);
+
+            //}
+            this.Hide();
+        }
+
+        private CaseLogEntry GetFormEntryData()
+        {
             CaseLogEntry e = new CaseLogEntry();
             e.LogTSID = DateTime.Now.ToString("yyyyMMdd_HHmmss");
             e.LogStudyPath = Path.Combine(Settings.Default.LogDir, e.LogTSID);
@@ -107,6 +145,7 @@ namespace MyCaseLog
 
             e.BodyPart = e.BodyPart.Replace("||", "");
             e.Protocol = txtProtocol.Text.Trim();
+            e.Dx = txtDx.Text.Trim();
 
             if (!chkAnon.Checked)
             {
@@ -135,33 +174,11 @@ namespace MyCaseLog
             e.IsLocalConference = chkIsConf.Checked;
             e.IsSocietyConference = chkSocConf.Checked;
 
-            SaveEntryToExcel(e);
-            Debug.WriteLine(e.ToString());
-
-            //if (_gotSnapshot && chkSnap.Checked)
-            //{
-
-
-           // string savingPath = e.LogStudyPath + "\\Screenshot_" + DateTime.Now.ToString("yyyyMMddHHmmss") + ".jpeg";
-            //pictureBox1.Image.Save(savingPath, ImageFormat.Jpeg);
-            //don't create hyperlink to folder unless have screenshot
-            if (snaps.Count > 0)
-            {
-                if (!Directory.Exists(e.LogStudyPath))
-                    Directory.CreateDirectory(e.LogStudyPath);
-
-                              int i = 1;
-                foreach (Bitmap img in snaps)
-                {
-                    string savingPath = e.LogStudyPath + "\\Screenshot_" + DateTime.Now.ToString("yyyyMMddhhmmss") + $"_{i}.jpeg";
-                    img.Save(savingPath, ImageFormat.Jpeg);
-                    i++;
-                }
-            }
-            //}
-            this.Hide();
+            e.snaps.AddRange(snaps);
+            return e;
         }
 
+        
 
         #region Excel export
         public void SaveEntryToExcel(CaseLogEntry e)
@@ -209,7 +226,7 @@ namespace MyCaseLog
 
             }
             rowIDX = lastLogRowIDX;
-            Debug.WriteLine(rowIDX);
+            //Debug.WriteLine(rowIDX);
 
             ws.Cells[rowIDX, 1].Value = e.LogTSID;
             ws.Cells[rowIDX, 2].Value = e.Hosp;
@@ -532,7 +549,7 @@ namespace MyCaseLog
 		private void btnAddScreenshot_Click(object sender, EventArgs e)
 		{
             SelectArea fSA = new SelectArea( );
-            fSA.frm = this;
+            //fSA.frm = this;
             fSA.Show();
         }
 
@@ -543,7 +560,7 @@ namespace MyCaseLog
                 int imgIndex = listView1.SelectedIndices[0];
                 var bmp = snaps[imgIndex];
                 var frmImg = new ScreenshotForm(bmp, imgIndex);
-                frmImg.frm = this;
+                //frmImg.frm = this;
                 frmImg.StartPosition = FormStartPosition.CenterScreen;
                 frmImg.ShowDialog();
 
