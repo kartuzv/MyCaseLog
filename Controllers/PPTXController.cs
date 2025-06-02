@@ -77,16 +77,16 @@ namespace PPTXController
         /// Close the PowerPoint file
         ///  </summary> 
         public void Dispose()
-        {
-            this.Close();
+        {           
+            if (presentationDocument != null)
+            {
+                this.presentationDocument.Dispose();
+            }
         }
         /// <summary>
         /// 
         /// </summary>
-        public void Close()
-        {
-            this.presentationDocument.Close();
-        }
+       
         ///  <summary> 
         /// Calculate the number of slides.
         ///  </summary> 
@@ -823,13 +823,10 @@ namespace PPTXController
             var ph = sp.NonVisualShapeProperties.ApplicationNonVisualDrawingProperties.GetFirstChild<PlaceholderShape>();
             if (ph != null && ph.Type != null && ph.Type.HasValue)
             {
-                switch ((PlaceholderValues)ph.Type)
-                {
-                    case PlaceholderValues.Title:
-                    case PlaceholderValues.CenteredTitle:
-                        isTitle = true;
-                        break;
-                }
+				var phHolderShapeType = ((PlaceholderValues)ph.Type);
+				// Any title shape.// A centered title.
+				isTitle =  (phHolderShapeType == PlaceholderValues.Title || phHolderShapeType == PlaceholderValues.CenteredTitle);
+
             }
 
             return isTitle;
@@ -843,8 +840,9 @@ namespace PPTXController
         /// <returns>The image part</returns>
         internal ImagePart AddPicture(byte[] picture, string contentType)
         {
-            ImagePartType type = 0;
-            switch (contentType)
+         
+            var type  = ImagePartType.Jpeg;
+			switch (contentType)
             {
                 case "image/bmp":
                     type = ImagePartType.Bmp;

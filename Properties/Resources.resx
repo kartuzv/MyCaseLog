@@ -121,13 +121,16 @@
   <data name="PPTemplate2Pic" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\PPTemplate2Pic.pptx;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
+  <data name="Cancel2" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Cancel2.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
   <data name="MyCaseLogTemplate" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\MyCaseLogTemplate.xlsx;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="searchFolder_128" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\searchFolder_128.jpg;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="Cancel2" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\Cancel2.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <data name="agfa_24" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\agfa_24.jpg;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
 </root>

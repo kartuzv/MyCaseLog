@@ -1038,18 +1038,9 @@ namespace MyCaseLog.Controllers
             var placeholderShape = shape.NonVisualShapeProperties.ApplicationNonVisualDrawingProperties.GetFirstChild<PlaceholderShape>();
             if (placeholderShape != null && placeholderShape.Type != null && placeholderShape.Type.HasValue)
             {
-                switch ((PlaceholderValues)placeholderShape.Type)
-                {
-                    // Any title shape.
-                    case PlaceholderValues.Title:
-
-                    // A centered title.
-                    case PlaceholderValues.CenteredTitle:
-                        return true;
-
-                    default:
-                        return false;
-                }
+                var phHolderShapeType = ((PlaceholderValues)placeholderShape.Type);
+                // Any title shape.// A centered title.
+                return (phHolderShapeType == PlaceholderValues.Title || phHolderShapeType == PlaceholderValues.CenteredTitle);
             }
             return false;
         }
