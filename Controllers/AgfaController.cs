@@ -8,7 +8,7 @@ namespace MyCaseLog.Controllers
 {
 	public static class AgfaController
 	{
-		private const string AGFA_WADO_URL_STUDYLOOKUP = "https://eivnacsc2.imaging.ccf.org/wado?user=PEERLEARNAPIUSER&password=dA2a%25whVjiN%2625&requestType=Study&maxResults=1&contentType=text%2Fjavascript&AccessionNumber={0}";
+		private const string AGFA_WADO_URL_STUDYLOOKUP = "https://eivnacsc2.imaging.ccf.org/wado?user=PEERLEARNAPIUSER&password=j%5ES%26%25y%23HeVXSX8&requestType=Study&maxResults=1&contentType=text%2Fjavascript&AccessionNumber={0}";
 		private const string AGFA_EI_INTEGRATIONS_SHOWSTUDY_STUDYUID = "http://localhost:5006/integration/showStudy?suid={0}";
 		/*
 		 * $.ajax({url: apiLookupURL }) .done(function (studyUID) {
@@ -27,20 +27,29 @@ namespace MyCaseLog.Controllers
 				}
 			}
 		 */
-		public static void OpenStudyInAgfaEIByStudyUID(string studyUID)
+
+		public static async Task<bool> OpenInAgfaEI(string acc)
+		{ 
+			var studyUID = await LookupStudyUIDByAcc(acc);
+			if (!string.IsNullOrEmpty(studyUID))
+				return await OpenStudyInAgfaEIByStudyUID(studyUID);
+			else return false;
+		}
+		private static async Task<bool>  OpenStudyInAgfaEIByStudyUID(string studyUID)
 		{
+			bool result = false;
 			using (var httpClient = new HttpClient())
 			{
 				string wadoAPI_URL = string.Format(AGFA_EI_INTEGRATIONS_SHOWSTUDY_STUDYUID, studyUID);
-				
-				HttpResponseMessage response = httpClient.GetAsync(wadoAPI_URL).Result;
-				if (response.IsSuccessStatusCode)
-				{					
-				}
-			}
+
+				var  Tresponse = await httpClient.GetAsync(wadoAPI_URL);//.Result;
+
+				result =  Tresponse.IsSuccessStatusCode;
+			 }
+			return result;
 		}
 
-		public static async Task<string> LookupStudyUIDByAcc(string acc)
+		private static async Task<string> LookupStudyUIDByAcc(string acc)
 		{
 			string studyUID = "";
 
@@ -56,6 +65,8 @@ namespace MyCaseLog.Controllers
 
 					var responseObj = JsonConvert.DeserializeObject<JObject>(jsonString);
 					studyUID = FindFirstTagValueInWADOResponse(responseObj, "studyUID");
+					
+					
 				}
 			}
 			return studyUID;

@@ -1,9 +1,12 @@
-﻿using System.Drawing;
+﻿
+using System.Collections.Generic;
+
 
 namespace MyCaseLog
 {
 	public class CaseLogEntry
 	{
+		public int IDX { get; set; }
 		public string LogTSID { get; set; }
 		public string Modality { get; set; }
 		public string Specialty { get; set; }
@@ -28,6 +31,6 @@ namespace MyCaseLog
 		public string Dx { get; set; }
 		public string Tags { get; set; }
 		public string Notes { get; set; }
-		public System.Collections.Generic.List<Bitmap> snaps = new System.Collections.Generic.List<Bitmap>();
+		public List<string> SnapPaths { get; set; }
 	}
 }

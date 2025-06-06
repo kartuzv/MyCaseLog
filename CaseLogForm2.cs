@@ -1,38 +1,34 @@
-﻿using MyCaseLog.Controllers;
+﻿
+using MyCaseLog.Controllers;
 using MyCaseLog.Properties;
 using System;
 using System.Collections.Generic;
-using System.Data;
 using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Windows.Forms;
-using OfficeOpenXml;
 
 namespace MyCaseLog
 {
 	public partial class CaseLogForm2 : Form
 	{
-		List<Bitmap> snaps;
-		bool deleteInProgress = false;
-		//bool _gotSnapshot = false;
-		string xlsTemplatePath = "";
-		string pptxTemplatePath = "";
+		private FrmCaseList _frmCaseList;
+
 		SelectArea fSA;
-		string[] _specialtyList;
-		string[] _bodypartList;
+		CaseLogEntry logEntry;
 
-		private string _excelLogFileName = "MyCaseLog.xlsx";
-		int lastLogRowIDX = -1;
+		List<Image> snaps;
 
-		DataTable _dtCaseList = new DataTable();
-		string _pathToPPTexe = "";
-		public CaseLogForm2()
+		int bmpSelectedIDX = -1;
+		bool deleteInProgress = false;
+
+
+		public CaseLogForm2(FrmCaseList caseList)
 		{
 			InitializeComponent();
-			snaps = new List<Bitmap>();
-			this.Location = new Point((Screen.PrimaryScreen.WorkingArea.Width - this.Width) / 2, Screen.PrimaryScreen.WorkingArea.Height - this.Height);
-			this.WindowState = FormWindowState.Minimized;
+			_frmCaseList = caseList;
+
+			snaps = new List<Image>();
 
 			fSA = new SelectArea();
 			fSA.frm = this;
@@ -42,33 +38,17 @@ namespace MyCaseLog
 
 		private void CaseLogForm2_Load(object sender, EventArgs e)
 		{
-			//load user configurable specialty
-			_specialtyList = Settings.Default.SpecialityList.Split('|', StringSplitOptions.RemoveEmptyEntries);
-
-			if (_specialtyList.Length > 0)
-			{
-				Array.Sort(_specialtyList, StringComparer.InvariantCulture);
-
+			if (_frmCaseList.ListSpecialty.Length > 0)
 				cboSpecialty.Items.Clear();
-				cboSpecialty.Items.AddRange(_specialtyList);
 
-			}
+			cboSpecialty.Items.Add("");
+			cboSpecialty.Items.AddRange(_frmCaseList.ListSpecialty);
 
-			//load user configuarable bodypart
-			_bodypartList = Settings.Default.BodyPartList.Split('|', StringSplitOptions.RemoveEmptyEntries);
-			if (_bodypartList.Length > 0)
-			{
-				Array.Sort(_bodypartList, StringComparer.InvariantCulture);
+			if (_frmCaseList.ListBodypart.Length > 0)
 				cboBodyPart.Items.Clear();
-				cboBodyPart.Items.AddRange(_bodypartList);
-			}
 
-
-			if (Settings.Default.UsrSpecialty != "")
-			{
-				cboSpecialty.SelectedItem = Settings.Default.UsrSpecialty;
-				//chkKeepSpecialty.Checked = true;
-			}
+			cboBodyPart.Items.Add("");
+			cboBodyPart.Items.AddRange(_frmCaseList.ListBodypart);
 
 			if (Settings.Default.UsrBodyPart != "")
 			{
@@ -76,63 +56,83 @@ namespace MyCaseLog
 				chkKeepBodyPart.Checked = true;
 			}
 
-			//ensure ppt template is ready
-			//next to exe.
-			string applicationDirectory = Path.GetDirectoryName(Application.ExecutablePath);
-			string templateDir = applicationDirectory + "\\Template";
-			if (!Directory.Exists(templateDir))
-				Directory.CreateDirectory(templateDir);
-
-			xlsTemplatePath = templateDir + "\\MyCaseLog.xlsx";
-			pptxTemplatePath = templateDir + "\\PPTemplate2Pic.pptx";
-
-			if (!File.Exists(xlsTemplatePath))
-				File.WriteAllBytes(xlsTemplatePath, Resources.MyCaseLogTemplate);
-
-			if (!File.Exists(pptxTemplatePath))
-				File.WriteAllBytes(pptxTemplatePath, Resources.PPTemplate2Pic);
-
-			if (string.IsNullOrEmpty(Settings.Default.LogDir))
-			{
-				Settings.Default.LogDir = applicationDirectory + "\\Saved\\";
-				Settings.Default.Save();
-			}
-
-			if (!Directory.Exists(Settings.Default.LogDir))
-			{
-				Directory.CreateDirectory(Settings.Default.LogDir);
-				File.Copy(xlsTemplatePath, Settings.Default.LogDir + _excelLogFileName);
-			}
-
-			//load list of cases from excel log
-			_dtCaseList = ExcelToDataTable(Settings.Default.LogDir + _excelLogFileName);
-
 			cboPIDType.SelectedIndex = 0;
+		}
 
-			//find powerpoint installed 
-			//so we can open it later, 12,14,15,16 365 /root/office16
-			for (int i = 16; i > 11; i--)
+		public void ListRefreshed(string listType, string[] lst)
+		{
+			if (listType == "BodyPartList")
 			{
-				//"c:\Program Files\Microsoft Office\root\Office16\powerpnt.exe" /O Filename1.pptx,
-				string testPathOffice64bit = $"C:\\Program Files\\Microsoft Office\\Office{i}\\powerpnt.exe";
+				cboBodyPart.Items.Clear();
+				cboBodyPart.Items.Add("");
+				cboBodyPart.Items.AddRange(_frmCaseList.ListBodypart);
+			}
+			else
+			{
+				cboSpecialty.Items.Clear();
+				cboSpecialty.Items.Add("");
+				cboSpecialty.Items.AddRange(_frmCaseList.ListSpecialty);
+			}
+		}
 
-				if (File.Exists(testPathOffice64bit))
-				{
-					_pathToPPTexe = testPathOffice64bit;
-					break;
-				}
-				string testPathOffice32bit = $"C:\\Program Files (x86)\\Microsoft Office\\Office{i}\\powerpnt.exe";
-				if (File.Exists(testPathOffice32bit))
-				{
-					_pathToPPTexe = testPathOffice32bit;
-					break;
-				}
-			}
-			//attemt to check office365 pth
-			if (_pathToPPTexe == "" && File.Exists(@"c:\Program Files\Microsoft Office\root\Office16\powerpnt.exe"))
+		public void StartNewCase()
+		{
+			logEntry = new CaseLogEntry();
+			logEntry.IDX = 0;
+			logEntry.LogTSID = DateTime.Now.ToString("yyyyMMdd_HHmmss");
+			logEntry.LogStudyPath = Path.Combine(Settings.Default.LogDir, logEntry.LogTSID);
+			logEntry.SnapPaths = new List<string>();
+
+			snaps = new List<Image>();
+
+			txtNotes.Text = "";
+			txtPTID.Text = "";
+			txtTags.Text = "";
+
+			snaps.Clear();
+
+			imageList1.Images.Clear();
+			listView1.Items.Clear();
+		}
+
+		internal void ShowCase(CaseLogEntry logEntry)
+		{
+			snaps.Clear();
+
+			imageList1.Images.Clear();
+			listView1.Items.Clear();
+
+			this.logEntry = logEntry;
+			this.Show();
+			
+			txtTags.Text = logEntry.Tags;
+			txtNotes.Text = logEntry.Notes;
+			cboPIDType.Text = logEntry.PTIdType;
+			txtPTID.Text = logEntry.PTMRN;
+
+			cboSpecialty.SelectedIndex = cboSpecialty.FindStringExact(logEntry.Specialty);
+			cboSpecialty.Refresh();
+			cboBodyPart.SelectedIndex = cboBodyPart.FindStringExact(logEntry.BodyPart);
+			cboBodyPart.Refresh();
+			//cboSpecialty.Text = logEntry.Specialty;
+			//cboBodyPart.Text = logEntry.BodyPart;
+			logEntry.LogStudyPath = Path.Combine(Settings.Default.LogDir, logEntry.LogTSID);
+			logEntry.SnapPaths = new List<string>();
+
+			if (Directory.Exists(logEntry.LogStudyPath))
 			{
-				_pathToPPTexe = @"c:\Program Files\Microsoft Office\root\Office16\powerpnt.exe";
+				logEntry.SnapPaths = Directory.GetFiles(logEntry.LogStudyPath, $"{logEntry.LogTSID}_*.jpeg").ToList();
+
+				foreach (var jpgPath in logEntry.SnapPaths)
+				{
+					Image img = AppController.FromFile(jpgPath);
+					snaps.Add(img);
+					imageList1.Images.Add(img);
+					listView1.Items.Add("", imageList1.Images.Count - 1);
+				}
+
 			}
+			
 
 		}
 
@@ -143,10 +143,14 @@ namespace MyCaseLog
 
 		private void CaseLogForm2_FormClosing(object sender, FormClosingEventArgs e)
 		{
-			Settings.Default.UsrSpecialty = cboSpecialty.Text;
-			Settings.Default.UsrBodyPart = (chkKeepBodyPart.Checked) ? cboBodyPart.Text : "";
-			Settings.Default.Save();
+			//Settings.Default.UsrSpecialty = cboSpecialty.Text;
+			//Settings.Default.UsrBodyPart = (chkKeepBodyPart.Checked) ? cboBodyPart.Text : "";
+			//Settings.Default.Save();
+			snaps.Clear();
 
+			imageList1.Images.Clear();
+			listView1.Items.Clear();
+			fSA.Dispose();
 		}
 
 		#region screenshot functions
@@ -158,9 +162,15 @@ namespace MyCaseLog
 
 		internal void AddScreenshotCapturedBMP(Bitmap bmp)
 		{
-			//pictureBox1.Image = bmp;
+			
+			if (!Directory.Exists(logEntry.LogStudyPath))
+				Directory.CreateDirectory(logEntry.LogStudyPath);
+
 			listView1.SelectedItems.Clear();
 			snaps.Add(bmp);
+			string bmpPath = $"{logEntry.LogStudyPath}\\{logEntry.LogTSID}_{(snaps.Count)}.jpeg";
+			bmp.Save(bmpPath, System.Drawing.Imaging.ImageFormat.Jpeg);
+			logEntry.SnapPaths.Add(bmpPath);
 			//Image img = (Image)bmp;
 			imageList1.Images.Add(bmp);
 
@@ -168,16 +178,8 @@ namespace MyCaseLog
 			newImgItem.ImageIndex = imageList1.Images.Count - 1;
 			listView1.Items.Add(newImgItem);
 
-			fSA.Show();
-			//newImgItem.Position = new Point(newImgItem.GetBounds(ItemBoundsPortion.Entire).Width * (listView1.Items.Count - 1), 0);
+			this.Show();
 
-			//listView1.Items.Add("", imageList1.Images.Count - 1);
-
-			//ListViewItem lvi = new ListViewItem(imageList1.Images.Count.ToString(), imageList1.Images.Count - 1);
-			//listView1.Items.Add(lvi);
-			//
-			//_gotSnapshot = true;
-			//chkSnap_CheckedChanged(null, null);
 		}
 		internal void DeleteScreenshot(int indx)
 		{
@@ -189,6 +191,13 @@ namespace MyCaseLog
 			snaps.RemoveAt(indx);
 			imageList1.Images.RemoveAt(indx);
 			listView1.Items.RemoveAt(indx);
+
+			string jpgPath = logEntry.SnapPaths[indx];
+			logEntry.SnapPaths.RemoveAt(indx);
+
+			if (File.Exists(jpgPath))
+				File.Delete(jpgPath);
+
 			if (!isLast)
 			{
 				imageList1.Images.Clear();
@@ -201,7 +210,7 @@ namespace MyCaseLog
 			}
 
 			listView1.Refresh();
-			//chkSnap_CheckedChanged(null, null);
+
 			deleteInProgress = false;
 		}
 
@@ -215,38 +224,41 @@ namespace MyCaseLog
 		{
 			if (listView1.SelectedIndices.Count > 0 && !deleteInProgress)
 			{
-				int imgIndex = listView1.SelectedIndices[0];
-				var bmp = snaps[imgIndex];
-				var frmImg = new ScreenshotForm(bmp, imgIndex);
-				frmImg.frm = this;
-				frmImg.StartPosition = FormStartPosition.CenterParent;
-				frmImg.ShowDialog();
-
+				bmpSelectedIDX = listView1.SelectedIndices[0];
+				var bmp = (Bitmap)snaps[bmpSelectedIDX];
+				using (var frmImg = new ScreenshotForm(bmp, bmpSelectedIDX))
+				{
+					frmImg.frm = this;
+					frmImg.StartPosition = FormStartPosition.CenterParent;
+					frmImg.ShowDialog();
+				}
+					
 			}
 		}
 		#endregion
 
 		private void btnSave_Click(object sender, EventArgs e)
 		{
-			CaseLogEntry logEntry = GetFormEntryData();
-			PowerPointController pptxCtrl = new PowerPointController(Settings.Default.LogDir, pptxTemplatePath);
-			pptxCtrl.AddMyCaseToCollection(logEntry);
+			GetFormEntryData();
 
-			SaveEntryToExcel(logEntry);
+			//save unsaved snaps
+			if (snaps.Count > logEntry.SnapPaths.Count)
+			{
+				int unsavedIndex = (snaps.Count - logEntry.SnapPaths.Count) - 1;
 
-			//add to local list in memory
-			DataRow r = _dtCaseList.NewRow();
-			r["LogID"] = logEntry.LogTSID;
-			r["Speciality"] = logEntry.Specialty;
-			r["BodyPart"] = logEntry.BodyPart;
-			r["Accession"] = logEntry.PTIdType == "MRN" ? "" : logEntry.PTMRN;
-			r["MRN"] = logEntry.PTIdType == "MRN" ? logEntry.PTMRN : "";
-			r["Notes"] = logEntry.Notes;
-			r["Tags"] = logEntry.Tags;
-			r["PowerPointFile"] = $"MCL_{logEntry.Specialty}.pptx";
-			_dtCaseList.Rows.Add(r);
+				if (!Directory.Exists(logEntry.LogStudyPath))
+					Directory.CreateDirectory(logEntry.LogStudyPath);
 
-			MessageBox.Show("Saved");
+				for (int i = unsavedIndex; i < snaps.Count; i++)
+				{
+					var bmpSnap = snaps[i];
+					bmpSnap.Save($"{logEntry.LogStudyPath}\\{logEntry.LogTSID}_{(i + 1)}.jpeg", System.Drawing.Imaging.ImageFormat.Jpeg);
+
+				}
+			}
+
+			this._frmCaseList.SaveCaseLogEntryToLog(logEntry);
+
 			txtNotes.Text = "";
 			txtPTID.Text = "";
 			txtTags.Text = "";
@@ -254,197 +266,19 @@ namespace MyCaseLog
 			imageList1.Images.Clear();
 			snaps.Clear();
 
-			//this.WindowState = FormWindowState.Minimized;
+			this.Hide();
 		}
 
-		private CaseLogEntry GetFormEntryData()
+		private void GetFormEntryData()
 		{
-			CaseLogEntry e = new CaseLogEntry();
-			e.LogTSID = DateTime.Now.ToString("yyyyMMdd_HHmmss");
-			e.LogStudyPath = Path.Combine(Settings.Default.LogDir, e.LogTSID);
-
-			e.Specialty = cboSpecialty.Text;
-			e.BodyPart = cboBodyPart.Text;
-			e.Tags = txtTags.Text.Trim();
-			e.Notes = txtNotes.Text.Trim();
-			e.PTIdType = cboPIDType.Text;
-			e.PTMRN = txtPTID.Text.Trim();
-
-			e.snaps.AddRange(snaps);
-			return e;
-		}
-
-		public void SaveEntryToExcel(CaseLogEntry e)
-		{
-			string pathToExcelLog = Settings.Default.LogDir + _excelLogFileName;
-
-			ExcelPackage.LicenseContext = OfficeOpenXml.LicenseContext.NonCommercial;
-			ExcelPackage pck = new ExcelPackage(new FileInfo(pathToExcelLog));
-			//ExcelWorksheet wsDt;
-
-			//const string invalidCharsRegex = @"[/\\*'?[\]:()]+";
-			//const int maxLength = 31;//excel tabname char limit
-			ExcelWorksheet ws = pck.Workbook.Worksheets[0];
-			// find next
-			int rowIDX = 2;
-			int colIDX = 1;
-			if (lastLogRowIDX < 0)
-			{
-				//Cells only contains references to cells with actual data
-				//var cells = ws.Cells;
-				//int cnt = cells.Count();
-
-				//var rowIndicies = cells
-				//    .Select(c => c.Start.Row)
-				//    .Distinct()
-				//    .ToList();
-
-				////Skip the header row which was added by LoadFromDataTable
-				//for (var i = 1; i <= 10; i++)
-				//    Console.WriteLine($"Row {i} is empty: {rowIndicies.Contains(i)}");
-
-				//string colIDValue = "x";
-				while (lastLogRowIDX < 0)
-				{
-
-					if (ws.Cells[rowIDX, colIDX].Value == null)
-					{
-						//colIDValue = ws.Cells[rowIDX, colIDX].Value.ToString().Trim();
-						lastLogRowIDX = rowIDX;
-					}
-					rowIDX++;
-				}
-
-			}
-			rowIDX = lastLogRowIDX;
-			//Debug.WriteLine(rowIDX);
-
-			ws.Cells[rowIDX, 1].Value = e.LogTSID;
-			ws.Cells[rowIDX, 2].Value = e.Specialty;
-			ws.Cells[rowIDX, 3].Value = e.BodyPart;
-
-			ws.Cells[rowIDX, 4].Value = e.PTIdType == "MRN" ? "" : e.PTMRN;
-			ws.Cells[rowIDX, 5].Value = e.PTIdType == "MRN" ? e.PTMRN : "";
-
-			ws.Cells[rowIDX, 6].Value = e.Notes;
-			ws.Cells[rowIDX, 7].Value = e.Tags;
-
-			ws.Cells[rowIDX, 8].Formula = $"HYPERLINK(\"MCL_{e.Specialty}.pptx\", \"MCL_{e.Specialty}.pptx\")";
-
-
-			pck.Save();
-			pck.Dispose();
-			lastLogRowIDX++;//skip searching next time
+			logEntry.Specialty = cboSpecialty.Text;
+			logEntry.BodyPart = cboBodyPart.Text;
+			logEntry.Tags = txtTags.Text.Trim();
+			logEntry.Notes = txtNotes.Text.Trim();
+			logEntry.PTIdType = cboPIDType.Text;
+			logEntry.PTMRN = txtPTID.Text.Trim();
 
 		}
-
-		public static DataTable ExcelPackageToDataTable(ExcelPackage excelPackage, int sheetIndex = 0)
-		{
-			ExcelPackage.LicenseContext = OfficeOpenXml.LicenseContext.NonCommercial;
-			DataTable dt = new DataTable();
-			ExcelWorksheet worksheet = excelPackage.Workbook.Worksheets[sheetIndex];
-
-			//check if the worksheet is completely empty
-			if (worksheet.Dimension == null)
-			{
-				return dt;
-			}
-
-			//create a list to hold the column names
-			List<string> columnNames = new List<string>();
-
-			//needed to keep track of empty column headers
-			int currentColumn = 1;
-
-			//loop all columns in the sheet and add them to the datatable
-			foreach (var cell in worksheet.Cells[1, 1, 1, worksheet.Dimension.End.Column])
-			{
-				string columnName = cell.Text.Trim();
-
-				//check if the previous header was empty and add it if it was
-				if (cell.Start.Column != currentColumn)
-				{
-					columnNames.Add("Header_" + currentColumn);
-					dt.Columns.Add("Header_" + currentColumn);
-					currentColumn++;
-				}
-
-				//add the column name to the list to count the duplicates
-				columnNames.Add(columnName);
-
-				//count the duplicate column names and make them unique to avoid the exception
-				//A column named 'Name' already belongs to this DataTable
-				int occurrences = columnNames.Count(x => x.Equals(columnName));
-				if (occurrences > 1)
-				{
-					columnName = columnName + "_" + occurrences;
-				}
-
-				//add the column to the datatable
-				dt.Columns.Add(columnName);
-
-				currentColumn++;
-			}
-
-			//start adding the contents of the excel file to the datatable
-			for (int i = 2; i <= worksheet.Dimension.End.Row; i++)
-			{
-				var row = worksheet.Cells[i, 1, i, worksheet.Dimension.End.Column];
-				DataRow newRow = dt.NewRow();
-
-				//loop all cells in the row
-				foreach (var cell in row)
-				{
-					newRow[cell.Start.Column - 1] = cell.Text;
-				}
-
-				dt.Rows.Add(newRow);
-			}
-
-			return dt;
-		}
-
-		public static DataTable ExcelToDataTable(string filePath, int sheetIndex = 0)
-		{
-			DataTable dt = new DataTable();
-			FileInfo existingFile = new FileInfo(filePath);
-			ExcelPackage.LicenseContext = OfficeOpenXml.LicenseContext.NonCommercial;
-			using (ExcelPackage pck = new ExcelPackage(existingFile))
-			{
-				var ws = pck.Workbook.Worksheets[0];
-				foreach (var cell in ws.Cells[1, 1, 1, ws.Dimension.End.Column])
-				{
-					dt.Columns.Add(cell.Text.Trim());
-				}
-				for (int i = 2; i <= ws.Dimension.End.Row; i++)
-				{
-					var row = ws.Cells[i, 1, i, ws.Dimension.End.Column];
-					DataRow newRow = dt.NewRow();
-
-					//loop all cells in the row
-					foreach (var cell in row)
-					{
-						if (cell.Formula != "" && cell.Text == "")
-						{
-							if (cell.Formula.Contains("HYPERLINK("))//HYPERLINK("url/path","friendly-name")
-							{
-								string targetFile = cell.Formula.Split(",")[1];
-								targetFile = targetFile.Replace(")", "").Replace("\"", "");
-								newRow[cell.Start.Column - 1] = targetFile.Trim();
-								continue;
-							}
-						}
-
-						newRow[cell.Start.Column - 1] = cell.Text;
-					}
-
-					dt.Rows.Add(newRow);
-
-				}
-			}
-			return dt;
-		}
-
 
 		private void btnView_Click(object sender, EventArgs e)
 		{
@@ -458,34 +292,36 @@ namespace MyCaseLog
 
 		private void btnEditListSpeciality_Click(object sender, EventArgs e)
 		{
-			FrmListEditor frmEditr = new FrmListEditor(_specialtyList, "Specialty");
-			if (frmEditr.ShowDialog() == DialogResult.OK)
-			{
-				_specialtyList = frmEditr.ItemList.ToArray();
-				cboSpecialty.Items.Clear();
-				cboSpecialty.Items.AddRange(_specialtyList);
+			//FrmListEditor frmEditr = new FrmListEditor(_frmCaseList.ListSpecialty, "Specialty");
+			//if (frmEditr.ShowDialog() == DialogResult.OK)
+			//{
+			//	_frmCaseList.ListSpecialty = frmEditr.ItemList.ToArray();
+			//	cboSpecialty.Items.Clear();
+			//	cboSpecialty.Items.AddRange(_frmCaseList.ListSpecialty);
 
-				Settings.Default.SpecialityList = string.Join('|', _specialtyList);
-				Settings.Default.Save();
-			}
-			frmEditr.Close();
-			frmEditr.Dispose();
+			//	Settings.Default.SpecialityList = string.Join('|', _frmCaseList.ListSpecialty);
+			//	Settings.Default.Save();
+			//}
+			//frmEditr.Close();
+			//frmEditr.Dispose();
+			MessageBox.Show("Log List Window -> Settings -> Speciality List");
 		}
 
 		private void btnEditListBodyPart_Click(object sender, EventArgs e)
 		{
-			FrmListEditor frmEditr = new FrmListEditor(_bodypartList, "Body Part");
-			if (frmEditr.ShowDialog() == DialogResult.OK)
-			{
-				_bodypartList = frmEditr.ItemList.ToArray();
-				cboBodyPart.Items.Clear();
-				cboBodyPart.Items.AddRange(_bodypartList);
+			//FrmListEditor frmEditr = new FrmListEditor(_frmCaseList.ListBodypart, "Body Part");
+			//if (frmEditr.ShowDialog() == DialogResult.OK)
+			//{
+			//	_frmCaseList.ListBodypart = frmEditr.ItemList.ToArray();
+			//	cboBodyPart.Items.Clear();
+			//	cboBodyPart.Items.AddRange(_frmCaseList.ListBodypart);
 
-				Settings.Default.BodyPartList = string.Join('|', _bodypartList);
-				Settings.Default.Save();
-			}
-			frmEditr.Close();
-			frmEditr.Dispose();
+			//	Settings.Default.BodyPartList = string.Join('|', _frmCaseList.ListBodypart);
+			//	Settings.Default.Save();
+			//}
+			//frmEditr.Close();
+			//frmEditr.Dispose();
+			MessageBox.Show("Log List Window -> Settings -> Body Part List");
 		}
 
 		private void AddPresetTag_Click(object sender, EventArgs e)
@@ -493,46 +329,61 @@ namespace MyCaseLog
 			txtTags.Text = txtTags.Text + " " + ((Button)sender).Text;
 		}
 
-		private void btnViewSpecialtyCases_Click(object sender, EventArgs e)
-		{
-			FrmCaseList lstFrm = new FrmCaseList(_specialtyList, _dtCaseList, _pathToPPTexe);
-			lstFrm.StartPosition = FormStartPosition.CenterParent;
-			lstFrm.ShowDialog();
-			//int newWidth = this.Width == 1000 ? 515 : 1000;
-			//string btnOpenerIcon = newWidth == 1000 ? "t" : "u";
-			//btnViewSpecialtyCases.Text = btnOpenerIcon;
 
-			//this.Width = newWidth;
-			//DataTable dtList = new DataTable();
-			//dtList.Columns.Add("#", typeof(string));
-			//dtList.Columns.Add("BodyPart", typeof(string));
-			//dtList.Columns.Add("MRN", typeof(string));
-			//dtList.Columns.Add("Date", typeof(string));
-			//dtList.Columns.Add("Tags", typeof(string));
-			//dtList.Columns.Add("Notes", typeof(string));
-
-			//if (this.Width == 1000)
-			//{
-			//    PowerPointController p = new PowerPointController(Settings.Default.LogDir, pptxTemplatePath);
-			//    List<string> pptTitles= p.GetAllCaseTitles(cboSpecialty.Text);
-			//    foreach (string titleCSV in pptTitles)
-			//    {
-			//        string[] t = titleCSV.Split("|");
-			//        t[2] = t[2].Replace("MRN:", "");
-			//        t[4] = t[4].Replace("[TAGS]:", "");
-
-			//        dtList.Rows.Add(t);
-			//    }
-			//    gvCaseList.DataSource = dtList;
-			//}
-		}
-
-		private void btnOpenAccessionInEI_Click(object sender, EventArgs e)
+		private async void btnOpenAccessionInEI_Click(object sender, EventArgs e)
 		{
 			string acc = txtPTID.Text.Trim();
+			try
+			{
+				pbOpeningEI.Visible = true;
 
-			System.Threading.Tasks.Task<string> task = AgfaController.LookupStudyUIDByAcc(txtPTID.Text.Trim());
+				var IsSuccess = await AgfaController.OpenInAgfaEI(acc);
+
+				pbOpeningEI.Visible = false;
+				if (!IsSuccess)
+					MessageBox.Show("Couldn't contact AGFA EI to open ACCESSION", "Failed EI Call");
+
+			}
+			catch (Exception ex)
+			{
+				var x = ex.Message;
+			}
+			finally
+			{
+				pbOpeningEI.Visible = false;
+			}
 		}
+
+		private void cboPIDType_SelectedIndexChanged(object sender, EventArgs e)
+		{
+			btnOpenAccessionInEI.Visible = (cboPIDType.SelectedItem.ToString() == "Accession");
+		}
+
+		private void btnCancel_Click(object sender, EventArgs e)
+		{
+			this.Hide();
+
+			_frmCaseList.Show();
+		}
+
+		private void btnDeleteCase_Click(object sender, EventArgs e)
+		{
+			if (MessageBox.Show("Delete Case (all data,images and folder) ?", "Confirm Delete", MessageBoxButtons.YesNo) == DialogResult.Yes)
+			{
+				snaps.Clear();
+			
+				imageList1.Images.Clear();
+				imageList1.Dispose();
+				listView1.Items.Clear();
+				
+				this.Hide();
+				
+				_frmCaseList.DeleteEntry(this.logEntry);
+				
+			}
+		}
+
+
 
 
 

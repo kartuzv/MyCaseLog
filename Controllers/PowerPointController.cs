@@ -17,6 +17,7 @@ using Vt = DocumentFormat.OpenXml.VariantTypes;
 using System.Text;
 using System.Drawing;
 
+
 namespace MyCaseLog.Controllers
 {
     public class PowerPointController
@@ -28,7 +29,7 @@ namespace MyCaseLog.Controllers
         string logPath = "";
         //SlidePart blankTemplateSlidePart = null;
         //private PresentationDocument _templateDoc;
-
+        List<Bitmap> imgs = new List<Bitmap>();
         public PowerPointController(string pathToLogFolder, string pptTemplatePath)
         {
 
@@ -178,13 +179,48 @@ namespace MyCaseLog.Controllers
             return slidePart;
         }
 
+        public void GenerateCasePowerPoint(CaseLogEntry e)
+        {
+            if (!Directory.Exists(logPath))
+                Directory.CreateDirectory(logPath);
+
+            string pathToPPSlides = logPath + $"\\MCL_{e.LogTSID}.pptx";
+			File.Copy(pathToPPTemplate, pathToPPSlides, true);
+
+            imgs = new List<Bitmap>();
+			Bitmap bmp;
+			foreach (var jpgPath in e.SnapPaths)
+			{
+				bmp = new Bitmap(jpgPath);
+				imgs.Add(bmp);
+			}
+
+			using (document = PresentationDocument.Open(pathToPPSlides, true))
+			{
+				var presentationPart = document.PresentationPart;
+
+				int lastSlideIdx = 0;
+				//SlidePart lastSlidePart = GetLastSlide(document, out lastSlideIdx);
+				SlidePart firstSlideAsTemplate = presentationPart.GetSlidePartsInOrder().First();
+				SlidePart targetSlide = firstSlideAsTemplate;
+               
+				int slidesTotal = (imgs.Count % 2) == 1 ? (imgs.Count + 1) / 2 : imgs.Count / 2;
+				if (imgs.Count == 0)//special case - blank slide, no images.
+					slidesTotal = 1;
+
+				AddCaseSlideToPresentation(presentationPart, firstSlideAsTemplate, e, 1, slidesTotal, targetSlide);
+
+			}
+
+		}
         public void AddMyCaseToCollection(CaseLogEntry e)
         {
             string pathToPPSlides = EnsurePPSlideCollectionExists(e.Specialty);
 
-            //LoadTemplateSlidePart();//load template into memory
+			//LoadTemplateSlidePart();//load template into memory
+			imgs = new List<Bitmap>();
 
-            using (document = PresentationDocument.Open(pathToPPSlides, true))
+			using (document = PresentationDocument.Open(pathToPPSlides, true))
             {
                 var presentationPart = document.PresentationPart;
 
@@ -204,8 +240,8 @@ namespace MyCaseLog.Controllers
                     }
                 }
 
-                int slidesTotal = (e.snaps.Count % 2)==1? (e.snaps.Count+1)/2: e.snaps.Count/2;
-                if (e.snaps.Count == 0)//special case - blank slide, no images.
+                int slidesTotal = (e.SnapPaths.Count % 2)==1? (e.SnapPaths.Count+1)/2: e.SnapPaths.Count/2;
+                if (e.SnapPaths.Count == 0)//special case - blank slide, no images.
                     slidesTotal = 1;
 
                 AddCaseSlideToPresentation(presentationPart, firstSlideAsTemplate, e, 1, slidesTotal,targetSlide);
@@ -248,20 +284,20 @@ namespace MyCaseLog.Controllers
             //SlideSize slideSize = p.Presentation.GetFirstChild<SlideSize>();
             //int maxHeight = slideSize.Cy;
 
-            if (e.snaps.Count > 0)
+            if (imgs.Count > 0)
             {
-                AddImage(targetSlide, e.snaps.ElementAt(0), false);
-                e.snaps.RemoveAt(0);
+                AddImage(targetSlide, imgs.ElementAt(0), false);
+				imgs.RemoveAt(0);
             }
             //right
-            if (e.snaps.Count > 0)
+            if (imgs.Count > 0)
             {
-                AddImage(targetSlide, e.snaps.ElementAt(0), true);
-                e.snaps.RemoveAt(0);
+                AddImage(targetSlide, imgs.ElementAt(0), true);
+				imgs.RemoveAt(0);
             }
             p.Presentation.Save();
 
-            if (e.snaps.Count > 0)
+            if (imgs.Count > 0)
                 AddCaseSlideToPresentation(p, templateSlide, e, caseSlideNbr + 1,caseSlidesTotal);
 
             //AddImage(lastSlidePart, testImgLeft, ImagePartType.Jpeg, false);

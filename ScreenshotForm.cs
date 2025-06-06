@@ -41,9 +41,11 @@ namespace MyCaseLog
         {
             if (frm != null && imgIndex<0)
             {
-                frm.AddScreenshotCapturedBMP(bmp);
-                this.Hide();
-               
+                pbCapture.Image = null;
+				pbCapture.Invalidate();
+				
+				frm.AddScreenshotCapturedBMP(bmp);
+                this.Close();
             }
             else
                 this.Close();
@@ -59,9 +61,14 @@ namespace MyCaseLog
 
 		private void btnDelete_Click(object sender, EventArgs e)
 		{
-            if (frm != null && imgIndex > -1)
-            {
-                frm.DeleteScreenshot(imgIndex);
+			bmp.Dispose();
+			bmp = null;
+			pbCapture.Invalidate();
+
+			if (frm != null && imgIndex > -1)
+            { 
+
+				frm.DeleteScreenshot(imgIndex);
                 this.Close();
             }
             else
@@ -74,7 +81,11 @@ namespace MyCaseLog
 
 		private void btnRetry_Click(object sender, EventArgs e)
 		{
-            if (frm != null)
+			bmp.Dispose();
+			bmp = null;
+			pbCapture.Invalidate();
+
+			if (frm != null)
             {
                 frm.ReDoScreenshot();
                 this.Close();

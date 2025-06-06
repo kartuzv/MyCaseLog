@@ -3,15 +3,15 @@
   <Profiles />
   <Settings>
     <Setting Name="LogDir" GenerateDefaultValueInCode="false" Type="System.String" Scope="User">
-      <Value Profile="(Default)" />
+      <Value Profile="(Default)">C:\Users\kartuzv\source\repos\MyCaseLog\Saved\</Value>
     </Setting>
     <Setting Name="Locations" GenerateDefaultValueInCode="false" Type="System.String" Scope="Application">
       <Value Profile="(Default)">Hospital-1,Clinic-2,Univerity-3</Value>
     </Setting>
-    <Setting Name="UsrSpecialty" Type="System.String" Scope="User">
+    <Setting Name="UsrSpecialty" GenerateDefaultValueInCode="false" Type="System.String" Scope="User">
       <Value Profile="(Default)">Abdominal</Value>
     </Setting>
-    <Setting Name="UsrBodyPart" Type="System.String" Scope="User">
+    <Setting Name="UsrBodyPart" GenerateDefaultValueInCode="false" Type="System.String" Scope="User">
       <Value Profile="(Default)">Body</Value>
     </Setting>
     <Setting Name="SpecialityList" Type="System.String" Scope="User">

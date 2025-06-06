@@ -31,8 +31,6 @@ namespace MyCaseLog
 		{
 			components = new System.ComponentModel.Container();
 			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(CaseLogForm2));
-			System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle3 = new System.Windows.Forms.DataGridViewCellStyle();
-			System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle4 = new System.Windows.Forms.DataGridViewCellStyle();
 			label1 = new System.Windows.Forms.Label();
 			label2 = new System.Windows.Forms.Label();
 			cboSpecialty = new System.Windows.Forms.ComboBox();
@@ -51,24 +49,23 @@ namespace MyCaseLog
 			chkPPTX = new System.Windows.Forms.CheckBox();
 			chkXLSX = new System.Windows.Forms.CheckBox();
 			btnSave = new System.Windows.Forms.Button();
-			btnView = new System.Windows.Forms.Button();
 			txtTags = new System.Windows.Forms.TextBox();
 			btnEditListSpeciality = new System.Windows.Forms.Button();
-			btnViewSpecialtyCases = new System.Windows.Forms.Button();
 			button3 = new System.Windows.Forms.Button();
 			button4 = new System.Windows.Forms.Button();
 			button5 = new System.Windows.Forms.Button();
 			btnEditListBodyPart = new System.Windows.Forms.Button();
-			gvCaseList = new System.Windows.Forms.DataGridView();
 			btnOpenAccessionInEI = new System.Windows.Forms.Button();
-			((System.ComponentModel.ISupportInitialize)gvCaseList).BeginInit();
+			pbOpeningEI = new System.Windows.Forms.ProgressBar();
+			btnCancel = new System.Windows.Forms.Button();
+			btnDeleteCase = new System.Windows.Forms.Button();
 			SuspendLayout();
 			// 
 			// label1
 			// 
 			label1.AutoSize = true;
 			label1.ForeColor = System.Drawing.Color.White;
-			label1.Location = new System.Drawing.Point(11, 15);
+			label1.Location = new System.Drawing.Point(11, 66);
 			label1.Name = "label1";
 			label1.Size = new System.Drawing.Size(60, 15);
 			label1.TabIndex = 0;
@@ -78,7 +75,7 @@ namespace MyCaseLog
 			// 
 			label2.AutoSize = true;
 			label2.ForeColor = System.Drawing.Color.White;
-			label2.Location = new System.Drawing.Point(11, 56);
+			label2.Location = new System.Drawing.Point(11, 107);
 			label2.Name = "label2";
 			label2.Size = new System.Drawing.Size(61, 15);
 			label2.TabIndex = 1;
@@ -92,10 +89,10 @@ namespace MyCaseLog
 			cboSpecialty.ForeColor = System.Drawing.Color.White;
 			cboSpecialty.FormattingEnabled = true;
 			cboSpecialty.Items.AddRange(new object[] { "Abdominal", "Chest", "Body", "Nuclear", "Mammo", "Neuro", "Pediatrics", "MSK" });
-			cboSpecialty.Location = new System.Drawing.Point(118, 13);
+			cboSpecialty.Location = new System.Drawing.Point(118, 64);
 			cboSpecialty.Name = "cboSpecialty";
 			cboSpecialty.Size = new System.Drawing.Size(299, 23);
-			cboSpecialty.TabIndex = 2;
+			cboSpecialty.TabIndex = 1;
 			// 
 			// cboBodyPart
 			// 
@@ -105,16 +102,16 @@ namespace MyCaseLog
 			cboBodyPart.ForeColor = System.Drawing.Color.White;
 			cboBodyPart.FormattingEnabled = true;
 			cboBodyPart.Items.AddRange(new object[] { "Liver", "GB/Biliary", "Pancreas", "Kidneys/Ureters/Bladder", "Adrenals", "Lymph nodes", "Bowel", "Vasculature", "Female Gyn", "Male GU", "Genitourinary", "Bones", "Other" });
-			cboBodyPart.Location = new System.Drawing.Point(118, 53);
+			cboBodyPart.Location = new System.Drawing.Point(118, 104);
 			cboBodyPart.Name = "cboBodyPart";
 			cboBodyPart.Size = new System.Drawing.Size(299, 23);
-			cboBodyPart.TabIndex = 3;
+			cboBodyPart.TabIndex = 2;
 			// 
 			// label3
 			// 
 			label3.AutoSize = true;
 			label3.ForeColor = System.Drawing.Color.White;
-			label3.Location = new System.Drawing.Point(11, 104);
+			label3.Location = new System.Drawing.Point(11, 15);
 			label3.Name = "label3";
 			label3.Size = new System.Drawing.Size(61, 15);
 			label3.TabIndex = 4;
@@ -128,25 +125,26 @@ namespace MyCaseLog
 			cboPIDType.ForeColor = System.Drawing.Color.White;
 			cboPIDType.FormattingEnabled = true;
 			cboPIDType.Items.AddRange(new object[] { "Accession", "MRN" });
-			cboPIDType.Location = new System.Drawing.Point(99, 101);
+			cboPIDType.Location = new System.Drawing.Point(99, 12);
 			cboPIDType.Name = "cboPIDType";
 			cboPIDType.Size = new System.Drawing.Size(129, 23);
 			cboPIDType.TabIndex = 5;
+			cboPIDType.SelectedIndexChanged += cboPIDType_SelectedIndexChanged;
 			// 
 			// txtPTID
 			// 
 			txtPTID.BackColor = System.Drawing.Color.Black;
 			txtPTID.ForeColor = System.Drawing.Color.White;
-			txtPTID.Location = new System.Drawing.Point(243, 101);
+			txtPTID.Location = new System.Drawing.Point(243, 12);
 			txtPTID.Name = "txtPTID";
 			txtPTID.Size = new System.Drawing.Size(174, 23);
-			txtPTID.TabIndex = 6;
+			txtPTID.TabIndex = 0;
 			// 
 			// chkKeepBodyPart
 			// 
 			chkKeepBodyPart.AutoSize = true;
 			chkKeepBodyPart.ForeColor = System.Drawing.Color.White;
-			chkKeepBodyPart.Location = new System.Drawing.Point(428, 57);
+			chkKeepBodyPart.Location = new System.Drawing.Point(428, 108);
 			chkKeepBodyPart.Name = "chkKeepBodyPart";
 			chkKeepBodyPart.Size = new System.Drawing.Size(52, 19);
 			chkKeepBodyPart.TabIndex = 8;
@@ -157,7 +155,7 @@ namespace MyCaseLog
 			// 
 			label4.AutoSize = true;
 			label4.ForeColor = System.Drawing.Color.White;
-			label4.Location = new System.Drawing.Point(11, 146);
+			label4.Location = new System.Drawing.Point(12, 134);
 			label4.Name = "label4";
 			label4.Size = new System.Drawing.Size(41, 15);
 			label4.TabIndex = 9;
@@ -167,18 +165,18 @@ namespace MyCaseLog
 			// 
 			txtNotes.BackColor = System.Drawing.SystemColors.ControlText;
 			txtNotes.ForeColor = System.Drawing.Color.White;
-			txtNotes.Location = new System.Drawing.Point(11, 164);
+			txtNotes.Location = new System.Drawing.Point(12, 152);
 			txtNotes.Multiline = true;
 			txtNotes.Name = "txtNotes";
 			txtNotes.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
 			txtNotes.Size = new System.Drawing.Size(469, 70);
-			txtNotes.TabIndex = 10;
+			txtNotes.TabIndex = 3;
 			// 
 			// label5
 			// 
 			label5.AutoSize = true;
 			label5.ForeColor = System.Drawing.Color.White;
-			label5.Location = new System.Drawing.Point(12, 250);
+			label5.Location = new System.Drawing.Point(13, 238);
 			label5.Name = "label5";
 			label5.Size = new System.Drawing.Size(33, 15);
 			label5.TabIndex = 11;
@@ -191,7 +189,7 @@ namespace MyCaseLog
 			btnAddScreenshot.Location = new System.Drawing.Point(157, 320);
 			btnAddScreenshot.Name = "btnAddScreenshot";
 			btnAddScreenshot.Size = new System.Drawing.Size(175, 38);
-			btnAddScreenshot.TabIndex = 13;
+			btnAddScreenshot.TabIndex = 5;
 			btnAddScreenshot.TabStop = false;
 			btnAddScreenshot.Text = "Add Screenshot";
 			btnAddScreenshot.UseVisualStyleBackColor = false;
@@ -220,8 +218,9 @@ namespace MyCaseLog
 			listView1.Location = new System.Drawing.Point(13, 364);
 			listView1.MultiSelect = false;
 			listView1.Name = "listView1";
-			listView1.Size = new System.Drawing.Size(468, 109);
-			listView1.TabIndex = 15;
+			listView1.ShowGroups = false;
+			listView1.Size = new System.Drawing.Size(474, 110);
+			listView1.TabIndex = 6;
 			listView1.UseCompatibleStateImageBehavior = false;
 			listView1.MouseDoubleClick += listView1_MouseDoubleClick;
 			// 
@@ -266,32 +265,20 @@ namespace MyCaseLog
 			btnSave.Location = new System.Drawing.Point(327, 480);
 			btnSave.Name = "btnSave";
 			btnSave.Size = new System.Drawing.Size(154, 45);
-			btnSave.TabIndex = 18;
+			btnSave.TabIndex = 7;
 			btnSave.Text = "Save Case";
 			btnSave.UseVisualStyleBackColor = false;
 			btnSave.Click += btnSave_Click;
-			// 
-			// btnView
-			// 
-			btnView.BackColor = System.Drawing.Color.Black;
-			btnView.ForeColor = System.Drawing.Color.White;
-			btnView.Location = new System.Drawing.Point(13, 479);
-			btnView.Name = "btnView";
-			btnView.Size = new System.Drawing.Size(133, 45);
-			btnView.TabIndex = 19;
-			btnView.Text = "View Log";
-			btnView.UseVisualStyleBackColor = false;
-			btnView.Click += btnView_Click;
 			// 
 			// txtTags
 			// 
 			txtTags.BackColor = System.Drawing.Color.Black;
 			txtTags.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
 			txtTags.ForeColor = System.Drawing.Color.White;
-			txtTags.Location = new System.Drawing.Point(51, 247);
+			txtTags.Location = new System.Drawing.Point(52, 235);
 			txtTags.Name = "txtTags";
 			txtTags.Size = new System.Drawing.Size(429, 25);
-			txtTags.TabIndex = 20;
+			txtTags.TabIndex = 4;
 			// 
 			// btnEditListSpeciality
 			// 
@@ -300,7 +287,7 @@ namespace MyCaseLog
 			btnEditListSpeciality.Font = new System.Drawing.Font("Arial Narrow", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
 			btnEditListSpeciality.ForeColor = System.Drawing.Color.White;
 			btnEditListSpeciality.Image = (System.Drawing.Image)resources.GetObject("btnEditListSpeciality.Image");
-			btnEditListSpeciality.Location = new System.Drawing.Point(90, 13);
+			btnEditListSpeciality.Location = new System.Drawing.Point(90, 64);
 			btnEditListSpeciality.Name = "btnEditListSpeciality";
 			btnEditListSpeciality.Size = new System.Drawing.Size(23, 22);
 			btnEditListSpeciality.TabIndex = 21;
@@ -309,27 +296,13 @@ namespace MyCaseLog
 			btnEditListSpeciality.UseVisualStyleBackColor = false;
 			btnEditListSpeciality.Click += btnEditListSpeciality_Click;
 			// 
-			// btnViewSpecialtyCases
-			// 
-			btnViewSpecialtyCases.BackColor = System.Drawing.Color.Black;
-			btnViewSpecialtyCases.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-			btnViewSpecialtyCases.Font = new System.Drawing.Font("Webdings", 20.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-			btnViewSpecialtyCases.Location = new System.Drawing.Point(441, 4);
-			btnViewSpecialtyCases.Name = "btnViewSpecialtyCases";
-			btnViewSpecialtyCases.Size = new System.Drawing.Size(51, 38);
-			btnViewSpecialtyCases.TabIndex = 22;
-			btnViewSpecialtyCases.Text = "L";
-			btnViewSpecialtyCases.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-			btnViewSpecialtyCases.UseVisualStyleBackColor = false;
-			btnViewSpecialtyCases.Click += btnViewSpecialtyCases_Click;
-			// 
 			// button3
 			// 
 			button3.BackColor = System.Drawing.Color.Black;
 			button3.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
 			button3.Font = new System.Drawing.Font("Arial", 9.75F, System.Drawing.FontStyle.Underline, System.Drawing.GraphicsUnit.Point);
 			button3.ForeColor = System.Drawing.Color.White;
-			button3.Location = new System.Drawing.Point(51, 276);
+			button3.Location = new System.Drawing.Point(52, 264);
 			button3.Name = "button3";
 			button3.Size = new System.Drawing.Size(85, 25);
 			button3.TabIndex = 23;
@@ -343,7 +316,7 @@ namespace MyCaseLog
 			button4.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
 			button4.Font = new System.Drawing.Font("Arial", 9.75F, System.Drawing.FontStyle.Underline, System.Drawing.GraphicsUnit.Point);
 			button4.ForeColor = System.Drawing.Color.White;
-			button4.Location = new System.Drawing.Point(136, 276);
+			button4.Location = new System.Drawing.Point(137, 264);
 			button4.Name = "button4";
 			button4.Size = new System.Drawing.Size(50, 25);
 			button4.TabIndex = 24;
@@ -357,7 +330,7 @@ namespace MyCaseLog
 			button5.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
 			button5.Font = new System.Drawing.Font("Arial", 9.75F, System.Drawing.FontStyle.Underline, System.Drawing.GraphicsUnit.Point);
 			button5.ForeColor = System.Drawing.Color.White;
-			button5.Location = new System.Drawing.Point(192, 276);
+			button5.Location = new System.Drawing.Point(193, 264);
 			button5.Name = "button5";
 			button5.Size = new System.Drawing.Size(84, 25);
 			button5.TabIndex = 25;
@@ -372,7 +345,7 @@ namespace MyCaseLog
 			btnEditListBodyPart.Font = new System.Drawing.Font("Arial Narrow", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
 			btnEditListBodyPart.ForeColor = System.Drawing.Color.White;
 			btnEditListBodyPart.Image = (System.Drawing.Image)resources.GetObject("btnEditListBodyPart.Image");
-			btnEditListBodyPart.Location = new System.Drawing.Point(90, 54);
+			btnEditListBodyPart.Location = new System.Drawing.Point(90, 105);
 			btnEditListBodyPart.Name = "btnEditListBodyPart";
 			btnEditListBodyPart.Size = new System.Drawing.Size(22, 22);
 			btnEditListBodyPart.TabIndex = 26;
@@ -381,41 +354,13 @@ namespace MyCaseLog
 			btnEditListBodyPart.UseVisualStyleBackColor = false;
 			btnEditListBodyPart.Click += btnEditListBodyPart_Click;
 			// 
-			// gvCaseList
-			// 
-			gvCaseList.AllowUserToAddRows = false;
-			gvCaseList.AllowUserToDeleteRows = false;
-			dataGridViewCellStyle3.BackColor = System.Drawing.Color.Black;
-			dataGridViewCellStyle3.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-			dataGridViewCellStyle3.ForeColor = System.Drawing.Color.White;
-			dataGridViewCellStyle3.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
-			gvCaseList.AlternatingRowsDefaultCellStyle = dataGridViewCellStyle3;
-			gvCaseList.Anchor = System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left;
-			gvCaseList.BackgroundColor = System.Drawing.Color.Gray;
-			gvCaseList.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-			gvCaseList.GridColor = System.Drawing.Color.White;
-			gvCaseList.Location = new System.Drawing.Point(341, 278);
-			gvCaseList.MultiSelect = false;
-			gvCaseList.Name = "gvCaseList";
-			gvCaseList.ReadOnly = true;
-			dataGridViewCellStyle4.BackColor = System.Drawing.Color.Black;
-			dataGridViewCellStyle4.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-			dataGridViewCellStyle4.ForeColor = System.Drawing.Color.White;
-			dataGridViewCellStyle4.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
-			gvCaseList.RowsDefaultCellStyle = dataGridViewCellStyle4;
-			gvCaseList.RowTemplate.Height = 25;
-			gvCaseList.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.CellSelect;
-			gvCaseList.Size = new System.Drawing.Size(76, 54);
-			gvCaseList.TabIndex = 27;
-			gvCaseList.Visible = false;
-			// 
 			// btnOpenAccessionInEI
 			// 
 			btnOpenAccessionInEI.BackgroundImage = Properties.Resources.agfa_24;
 			btnOpenAccessionInEI.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center;
 			btnOpenAccessionInEI.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
 			btnOpenAccessionInEI.ForeColor = System.Drawing.Color.Black;
-			btnOpenAccessionInEI.Location = new System.Drawing.Point(428, 96);
+			btnOpenAccessionInEI.Location = new System.Drawing.Point(428, 7);
 			btnOpenAccessionInEI.Name = "btnOpenAccessionInEI";
 			btnOpenAccessionInEI.Size = new System.Drawing.Size(30, 30);
 			btnOpenAccessionInEI.TabIndex = 28;
@@ -423,22 +368,56 @@ namespace MyCaseLog
 			btnOpenAccessionInEI.UseVisualStyleBackColor = false;
 			btnOpenAccessionInEI.Click += btnOpenAccessionInEI_Click;
 			// 
+			// pbOpeningEI
+			// 
+			pbOpeningEI.Location = new System.Drawing.Point(11, 38);
+			pbOpeningEI.Name = "pbOpeningEI";
+			pbOpeningEI.Size = new System.Drawing.Size(476, 20);
+			pbOpeningEI.Style = System.Windows.Forms.ProgressBarStyle.Marquee;
+			pbOpeningEI.TabIndex = 29;
+			pbOpeningEI.Visible = false;
+			// 
+			// btnCancel
+			// 
+			btnCancel.BackColor = System.Drawing.Color.Black;
+			btnCancel.ForeColor = System.Drawing.Color.White;
+			btnCancel.Location = new System.Drawing.Point(19, 480);
+			btnCancel.Name = "btnCancel";
+			btnCancel.Size = new System.Drawing.Size(154, 45);
+			btnCancel.TabIndex = 30;
+			btnCancel.Text = "Cancel";
+			btnCancel.UseVisualStyleBackColor = false;
+			btnCancel.Click += btnCancel_Click;
+			// 
+			// btnDeleteCase
+			// 
+			btnDeleteCase.BackColor = System.Drawing.Color.Black;
+			btnDeleteCase.ForeColor = System.Drawing.Color.White;
+			btnDeleteCase.Location = new System.Drawing.Point(198, 510);
+			btnDeleteCase.Name = "btnDeleteCase";
+			btnDeleteCase.Size = new System.Drawing.Size(79, 28);
+			btnDeleteCase.TabIndex = 31;
+			btnDeleteCase.Text = "delete case";
+			btnDeleteCase.UseVisualStyleBackColor = false;
+			btnDeleteCase.Click += btnDeleteCase_Click;
+			// 
 			// CaseLogForm2
 			// 
 			AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
 			AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			BackColor = System.Drawing.Color.Black;
-			ClientSize = new System.Drawing.Size(494, 537);
+			ClientSize = new System.Drawing.Size(501, 537);
+			ControlBox = false;
+			Controls.Add(btnDeleteCase);
+			Controls.Add(btnCancel);
+			Controls.Add(pbOpeningEI);
 			Controls.Add(btnOpenAccessionInEI);
-			Controls.Add(gvCaseList);
 			Controls.Add(btnEditListBodyPart);
 			Controls.Add(button5);
 			Controls.Add(button4);
 			Controls.Add(button3);
-			Controls.Add(btnViewSpecialtyCases);
 			Controls.Add(btnEditListSpeciality);
 			Controls.Add(txtTags);
-			Controls.Add(btnView);
 			Controls.Add(btnSave);
 			Controls.Add(chkXLSX);
 			Controls.Add(chkPPTX);
@@ -460,11 +439,11 @@ namespace MyCaseLog
 			FormBorderStyle = System.Windows.Forms.FormBorderStyle.Fixed3D;
 			MaximizeBox = false;
 			Name = "CaseLogForm2";
-			StartPosition = System.Windows.Forms.FormStartPosition.Manual;
-			Text = "MyCaseLog";
+			ShowInTaskbar = false;
+			StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
+			Text = "MyCaseLog:Case Details";
 			FormClosing += CaseLogForm2_FormClosing;
 			Load += CaseLogForm2_Load;
-			((System.ComponentModel.ISupportInitialize)gvCaseList).EndInit();
 			ResumeLayout(false);
 			PerformLayout();
 		}
@@ -489,15 +468,15 @@ namespace MyCaseLog
 		private System.Windows.Forms.CheckBox chkPPTX;
 		private System.Windows.Forms.CheckBox chkXLSX;
 		private System.Windows.Forms.Button btnSave;
-		private System.Windows.Forms.Button btnView;
 		private System.Windows.Forms.TextBox txtTags;
 		private System.Windows.Forms.Button btnEditListSpeciality;
-		private System.Windows.Forms.Button btnViewSpecialtyCases;
 		private System.Windows.Forms.Button button3;
 		private System.Windows.Forms.Button button4;
 		private System.Windows.Forms.Button button5;
 		private System.Windows.Forms.Button btnEditListBodyPart;
-		private System.Windows.Forms.DataGridView gvCaseList;
 		private System.Windows.Forms.Button btnOpenAccessionInEI;
+		private System.Windows.Forms.ProgressBar pbOpeningEI;
+		private System.Windows.Forms.Button btnCancel;
+		private System.Windows.Forms.Button btnDeleteCase;
 	}
 }

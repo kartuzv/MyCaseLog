@@ -174,7 +174,7 @@ namespace MyCaseLog
             e.IsLocalConference = chkIsConf.Checked;
             e.IsSocietyConference = chkSocConf.Checked;
 
-            e.snaps.AddRange(snaps);
+            //e.snaps.AddRange(snaps);
             return e;
         }
 
